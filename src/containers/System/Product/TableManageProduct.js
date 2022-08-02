@@ -12,11 +12,17 @@ class TableManageProduct extends Component {
         super(props);
         this.state = {
             productRedux: [],
+            errMessage: ""
         }
     }
 
     async componentDidMount() {
-        this.props.fetchProductRedux("ALL")
+        this.props.fetchProductRedux({
+            statusId: "ALL",
+            categoryId: "ALL",
+            brandId: "ALL",
+            valueSearch: "ALL"
+        })
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevProps.listProducts !== this.props.listProducts) {
@@ -39,14 +45,30 @@ class TableManageProduct extends Component {
             })
             if (type === 'BAN') {
                 toast.success(`Ẩn sản phẩm ${product.name} thành công!`)
-                this.props.fetchProductRedux("ALL")
+                this.props.fetchProductRedux({
+                    statusId: "ALL",
+                    categoryId: "ALL",
+                    brandId: "ALL",
+                    valueSearch: "ALL"
+                })
             }
             if (type === 'PERMIT') {
                 toast.success(`Hiện sản phẩm ${product.name} thành công!`)
-                this.props.fetchProductRedux("ALL")
+                this.props.fetchProductRedux({
+                    statusId: "ALL",
+                    categoryId: "ALL",
+                    brandId: "ALL",
+                    valueSearch: "ALL"
+                })
             }
         } catch (error) {
-            console.log(error);
+            if (error.response) {
+                if (error.response.data) {
+                    this.setState({
+                        errMessage: error.response.data.message
+                    })
+                }
+            }
             toast.error("Thao tác thất bại! Vui lòng thử lại sau.")
         }
     }
@@ -75,8 +97,8 @@ class TableManageProduct extends Component {
                                         <td>{item.name}</td>
                                         <td>{item.view}</td>
                                         <td>{item.stock}</td>
-                                        <td>{item.originalPrice + ' VND'}</td>
-                                        <td>{item.discountPrice + ' VND'}</td>
+                                        <td>{item.originalPrice.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}</td>
+                                        <td>{item.discountPrice.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}</td>
                                         <td>{item.percentDiscount + '%'}</td>
                                         <td>{item.statusId === 'S1' ? "Hiện" : "Ẩn"} </td>
                                         <td>
@@ -130,7 +152,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchProductRedux: (statusId) => dispatch(actions.fetchAllProducts(statusId)),
+        fetchProductRedux: (data) => dispatch(actions.fetchAllProducts(data)),
         deleteAProductRedux: (id) => dispatch(actions.deleteAProduct(id)),
     };
 };

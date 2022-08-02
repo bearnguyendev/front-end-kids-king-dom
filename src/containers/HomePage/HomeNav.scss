@@ -5,7 +5,7 @@
     position: sticky;
     top: 0;
     background-color: white;
-    z-index: 1111;
+    z-index: 999;
     border-bottom: 1px solid rgba(255, 255, 255, 0.812);
     .home-nav-content{
         display: flex;
@@ -14,7 +14,7 @@
         .left-content{
             width: 25%;
             .nav-logo{
-                background: url(../../assets/logo3.jpg);
+                background: url(../../assets/logo1.svg);
                 height: 100%;
                 width: 100%;
                 cursor: pointer;
@@ -74,7 +74,7 @@
                 cursor: pointer;
                 .box-quantity-cart{
                     border-radius: 50%;
-                    width: 15px;
+                    min-width: 15px;
                     height: 15px;
                     background-color: #ee4266;
                     color: #fff;

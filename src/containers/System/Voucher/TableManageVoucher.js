@@ -12,7 +12,8 @@ class TableManageVoucher extends Component {
         super(props);
         this.state = {
             arrVouchers: [],
-            isOpen: false
+            isOpen: false,
+            errMessage: ""
         }
     }
 
@@ -51,6 +52,7 @@ class TableManageVoucher extends Component {
     }
     render() {
         let { arrVouchers } = this.state;
+        console.log("check stateaaa: ", arrVouchers);
         return (
             <>
                 <table id='TableManageVoucher'>
@@ -74,7 +76,7 @@ class TableManageVoucher extends Component {
                                         <tr key={index}>
                                             <td>{index + 1}</td>
                                             <td>{item.codeVoucher}</td>
-                                            <td>{item.typeVoucherOfVoucherData.value}{item.typeVoucherOfVoucherData.typeVoucherData.value}</td>
+                                            <td>{item.typeVoucherOfVoucherData.type === 'percent' ? item.typeVoucherOfVoucherData.value + "%" : item.typeVoucherOfVoucherData.value.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}</td>
                                             <td>{item.number}</td>
                                             <td>{item.numberUsed}</td>
                                             <td>{moment.unix(item.fromDate / 1000).format('L')}</td>

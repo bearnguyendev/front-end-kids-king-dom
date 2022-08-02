@@ -21,6 +21,7 @@ class ManageBanner extends Component {
             action: '',
             editId: '',
             isOpen: false,
+            errMessage: ""
         }
     }
     componentDidMount() {
@@ -135,6 +136,7 @@ class ManageBanner extends Component {
         let { name, image, description, previewImgURL, isOpen } = this.state
         return (
             <div className='manage-banner-container'>
+
                 <div className="title" >
                     <FormattedMessage id={"manage-banner.title"} />
                 </div>
@@ -186,10 +188,14 @@ class ManageBanner extends Component {
                                     {this.state.action === CRUD_ACTIONS.EDIT ? <FormattedMessage id={"manage-banner.edit"} /> : <FormattedMessage id={"manage-banner.save"} />}
                                 </button>
                             </div>
-                            <div className='col-12 my-3' style={{ fontWeight: '600' }}>
-                                <FormattedMessage id={"manage-banner.list"} />
+                        </div>
+                        <div className="card mb-4">
+                            <div className="card-header">
+                                <div className="title mb-2" >
+                                    <FormattedMessage id={"manage-banner.list"} />
+                                </div>
                             </div>
-                            <div className='col-12 shadow pt-3 mb-5 bg-white rounded'>
+                            <div className="card-body rounded">
                                 <TableManageBanner
                                     handleEditBannerFromParentKey={this.handleEditBannerFromParent}
                                 />

@@ -1,9 +1,12 @@
 .home-footer-container{
-    margin: 0 175px;
+    margin: 5px 175px;
     height: 350px;
-    background-color: #666;
-    color: #eee;
+    //background-color: #666;
+    //color: #eee;
+    border-top: 1px solid #e5e5e5;
+    color: #666;
     border-radius: 3px;
+    position: absolute;
     .home-footer-content{
         display: flex;
         flex-direction: column;
@@ -23,6 +26,7 @@
                 &:hover{
                     color: #45c3d2;
                     opacity: 1;
+                    cursor: pointer;
                 }
             }
             .home-ft-1{
@@ -37,6 +41,7 @@
                     &:hover{
                         color: #45c3d2;
                         opacity: 1;
+                        cursor: pointer;
                     }
                     .home-ft-icon{
                         font-size: 2rem;

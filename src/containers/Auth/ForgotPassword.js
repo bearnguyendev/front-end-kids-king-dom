@@ -4,6 +4,7 @@ import "./ForgotPassword.scss";
 import { sendForgotPassword } from "../../services/userService"
 import { KeyCodeUtils } from "../../utils";
 import { FormattedMessage } from "react-intl";
+import LoadingOverlay from "react-loading-overlay";
 
 class ForgotPassword extends Component {
     constructor(props) {
@@ -12,6 +13,7 @@ class ForgotPassword extends Component {
             email: "",
             errMessage: "",
             isShowSuccess: false,
+            isShowLoading: false
         };
     }
     handleOnChangeInput = (event, id) => {
@@ -23,11 +25,15 @@ class ForgotPassword extends Component {
     }
     handleBtnSend = async () => {
         this.setState({
-            errMessage: ""
+            errMessage: "",
+            isShowLoading: true
         })
         try {
             let data = await sendForgotPassword({
                 email: this.state.email
+            })
+            this.setState({
+                isShowLoading: false
             })
             if (data && data.errCode !== 0) {
                 this.setState({
@@ -56,50 +62,55 @@ class ForgotPassword extends Component {
         }
     }
     render() {
-        let { isShowSuccess } = this.state;
+        let { isShowSuccess, isShowLoading } = this.state;
         return (
             <>
-                {isShowSuccess === false ?
-                    <div className="forgot-pw-background">
-                        <div className="forgot-pw-container">
-                            <div className="forgot-pw-content row">
-                                <div className="col-12 text-forgot-pw">
-                                    <FormattedMessage id={"auth.forgot-pw"} />
-                                </div>
-                                <div className="col-12 form-group forgot-pw-input">
-                                    <label>
-                                        <FormattedMessage id={"auth.email"} />
-                                    </label>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        placeholder="Nhập địa chỉ email của bạn"
-                                        value={this.state.email}
-                                        onChange={(event) => this.handleOnChangeInput(event, "email")}
-                                        onKeyDown={(event) => this.handleKeyDown(event)}
-                                    />
-                                </div>
-                                <div className="col-12" style={{ color: 'red' }}>
-                                    {this.state.errMessage}
-                                </div>
-                                <div className="col-12">
-                                    <button
-                                        className="btn-forgot-pw"
-                                        onClick={() => this.handleBtnSend()}
-                                    >
-                                        <FormattedMessage id={"auth.send"} />
-                                    </button>
+                <LoadingOverlay
+                    active={isShowLoading}
+                    spinner
+                    text='Loading...'>
+                    {isShowSuccess === false ?
+                        <div className="forgot-pw-background">
+                            <div className="forgot-pw-container">
+                                <div className="forgot-pw-content row">
+                                    <div className="col-12 text-forgot-pw">
+                                        <FormattedMessage id={"auth.forgot-pw"} />
+                                    </div>
+                                    <div className="col-12 form-group forgot-pw-input">
+                                        <label>
+                                            <FormattedMessage id={"auth.email"} />
+                                        </label>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            placeholder="Nhập địa chỉ email của bạn"
+                                            value={this.state.email}
+                                            onChange={(event) => this.handleOnChangeInput(event, "email")}
+                                            onKeyDown={(event) => this.handleKeyDown(event)}
+                                        />
+                                    </div>
+                                    <div className="col-12" style={{ color: 'red' }}>
+                                        {this.state.errMessage}
+                                    </div>
+                                    <div className="col-12">
+                                        <button
+                                            className="btn-forgot-pw"
+                                            onClick={() => this.handleBtnSend()}
+                                        >
+                                            <FormattedMessage id={"auth.send"} />
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    :
-                    <div className="forgot-pw-background">
-                        <div className="text-center text-check-email">
-                            <FormattedMessage id={"auth.text-check-email"} />
+                        :
+                        <div className="forgot-pw-background">
+                            <div className="text-center text-check-email">
+                                <FormattedMessage id={"auth.text-check-email"} />
+                            </div>
                         </div>
-                    </div>
-                }
+                    }
+                </LoadingOverlay>
             </>
         );
     }

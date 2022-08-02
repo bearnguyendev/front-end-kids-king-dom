@@ -10,7 +10,12 @@
     height: 100vh;
     overflow: hidden;
 }
-
+div._loading_overlay_wrapper {
+  position: unset;
+  ._loading_overlay_overlay{
+    z-index: 10000;
+  }
+  }
 .btn {
     padding: 0;
     border: none;
@@ -85,20 +90,25 @@
       .modal-header {
         padding: 0 10px;
         height: 35px;
-        background-color: $colormain;
+        background-color: #17A2B8;
         color: $common-text-color;
         .modal-title {
           line-height: 35px;
           font-weight: 500;
           font-size: $base-size + 1px;
         }
-        .btn-close {
-          position: absolute;
+        .close {
           color: $common-text-color;
+          padding: 1.5rem 1rem ;
           i {
             line-height: 35px;
             font-size: $base-size + 2px;
           }
+        }
+      }
+      .modal-footer{
+        button{
+            min-width: 5rem;
         }
       }
     }

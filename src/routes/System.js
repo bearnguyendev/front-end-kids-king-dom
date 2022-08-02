@@ -15,6 +15,8 @@ import ManageTypeShip from '../containers/System/TypeShip/ManageTypeShip';
 import ManageBlog from '../containers/System/Blog/ManageBlog';
 import ManageTypeVoucher from '../containers/System/TypeVoucher/ManageTypeVoucher';
 import ManageVoucher from '../containers/System/Voucher/ManageVoucher';
+import ManageOrder from '../containers/System/Order/ManageOrder';
+import DetailOrder from '../containers/System/Order/DetailOrder';
 class System extends Component {
     render() {
         const { systemMenuPath, isAdmin } = this.props;
@@ -24,7 +26,7 @@ class System extends Component {
                     {isAdmin && <Header />}
                     <div className="system-list" style={{ minHeight: "calc(100vh - 100px)" }}>
                         <Switch>
-                            <Route path="/admin" exact component={Welcome} />
+                            <Route path={path.WELCOME_SYSTEM} exact component={Welcome} />
                             <Route path="/admin/manage-user" component={ManageUser} />
                             <Route path="/admin/manage-category" component={ManageCategory} />
                             <Route path="/admin/manage-brand" component={ManageBrand} />
@@ -36,6 +38,8 @@ class System extends Component {
                             <Route path={path.MANAGE_BLOG} exact component={ManageBlog} />
                             <Route path={path.MANAGE_TYPE_VOUCHER} exact component={ManageTypeVoucher} />
                             <Route path={path.MANAGE_VOUCHER} exact component={ManageVoucher} />
+                            <Route path={path.MANAGE_ORDER} exact component={ManageOrder} />
+                            <Route path={path.DETAIL_ORDER} exact component={DetailOrder} />
                             <Route component={() => { return (<Redirect to={systemMenuPath} />) }} />
                         </Switch>
                     </div>

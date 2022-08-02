@@ -4,19 +4,33 @@ import { connect } from 'react-redux';
 import * as actions from "../../store/actions";
 import "./HomeNav.scss";
 import { withRouter } from 'react-router';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
+import _ from 'lodash';
 class HomeNav extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-
+            arrItemOfCart: {}
         }
     }
-    componentDidMount() {
-
+    async componentDidMount() {
+        if (this.props.userInfo) {
+            let id = this.props.userInfo.id
+            this.props.fetchAllCartByUserId(id)
+        }
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.userInfo !== this.props.userInfo) {
+            this.setState({
+                arrItemOfCart: this.props.arrItemOfCartRedux
+            })
+        }
+        if (prevProps.arrItemOfCartRedux !== this.props.arrItemOfCartRedux) {
+            this.setState({
+                arrItemOfCart: this.props.arrItemOfCartRedux
+            })
+        }
     }
     returnToHome = () => {
         if (this.props.history) {
@@ -25,6 +39,7 @@ class HomeNav extends Component {
     }
     render() {
         const { userInfo, processLogout } = this.props
+        let { arrItemOfCart } = this.state
         return (
             <div className='home-nav-container'>
                 <div className='home-nav-content'>
@@ -51,15 +66,17 @@ class HomeNav extends Component {
                         <div className='support'>
                             <i className="fas fa-question-circle"></i>Hỗ trợ
                         </div>
-                        <div className='cart'>
-                            <ion-icon name="cart-outline" style={{ fontSize: "2rem", color: "#666" }}></ion-icon>
-                            <span className="box-quantity-cart">0</span>
-                        </div>
+                        <Link to={"/cart"}>
+                            <div className='cart'>
+                                <ion-icon name="cart-outline" style={{ fontSize: "2rem", color: "#666" }}></ion-icon>
+                                <span className="box-quantity-cart">{arrItemOfCart && !_.isEmpty(arrItemOfCart) && arrItemOfCart.ProductUserCartData ? arrItemOfCart.ProductUserCartData.length : 0}</span>
+                            </div>
+                        </Link>
                     </div>
                     <div className='right-content'>
                         {userInfo ?
                             <>
-                                <NavLink to={"/do something"}>
+                                <NavLink to={`/user/detail/${this.props.userInfo.id}`}>
                                     <div className='nav-img' style={{ backgroundImage: `url(${userInfo.image ? userInfo.image : 'https://www.seekpng.com/png/detail/428-4287240_no-avatar-user-circle-icon-png.png'})` }}>
                                     </div>
                                 </NavLink >
@@ -84,7 +101,6 @@ class HomeNav extends Component {
                     </div>
                 </div>
             </div>
-
         );
     }
 
@@ -93,11 +109,13 @@ class HomeNav extends Component {
 const mapStateToProps = state => {
     return {
         userInfo: state.user.userInfo,
+        arrItemOfCartRedux: state.cart.listCartItem
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
+        fetchAllCartByUserId: (id) => dispatch(actions.fetchAllCartByUserId(id)),
         processLogout: () => dispatch(actions.processLogout()),
     };
 };

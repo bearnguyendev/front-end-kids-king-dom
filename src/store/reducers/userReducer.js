@@ -12,13 +12,14 @@ const userReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isLoggedIn: true,
+                isAdmin: action.userInfo.roleId === "R1" ? true : false,
                 userInfo: action.userInfo
             }
-        case actionTypes.ADMIN_LOGIN_SUCCESS:
+        case actionTypes.UPDATE_USER_INFO:
             return {
                 ...state,
                 isLoggedIn: true,
-                isAdmin: true,
+                isAdmin: action.userInfo.roleId === "R1" ? true : false,
                 userInfo: action.userInfo
             }
         case actionTypes.USER_LOGIN_FAIL:

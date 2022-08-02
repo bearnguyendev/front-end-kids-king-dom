@@ -5,7 +5,7 @@ export const adminMenu = [
                 name: 'menu.admin.crud-user', link: '/admin/manage-user'
             },
             {//đơn hàng
-                name: 'menu.admin.manage-orders', link: '/admin/manage-user'
+                name: 'menu.admin.manage-orders', link: '/admin/manage-order'
             },
         ]
     },

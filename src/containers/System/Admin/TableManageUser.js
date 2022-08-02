@@ -29,6 +29,7 @@ class TableManageUser extends Component {
         super(props);
         this.state = {
             userRedux: [],
+            errMessage: ""
         }
     }
 
@@ -63,29 +64,38 @@ class TableManageUser extends Component {
                 this.props.fetchUserRedux()
             }
         } catch (error) {
-            console.log(error);
+            if (error.response) {
+                if (error.response.data) {
+                    this.setState({
+                        errMessage: error.response.data.message
+                    })
+                }
+            }
             toast.error("Thao tác thất bại! Vui lòng thử lại sau.")
         }
     }
     render() {
         let arrUsers = this.state.userRedux
-        console.log("check state isPermit: ", this.state.isPermitStatus);
+        const { userInfo } = this.props
         console.log("check props: ", this.props);
         return (
             <>
                 <table id='TableManageUser'>
-                    <tbody>
+                    <thead>
                         <tr>
                             <th>STT</th>
                             <th>Email</th>
                             <th>Họ và tên</th>
                             <th>Ngày sinh</th>
                             <th>Địa chỉ</th>
+                            <th>Vai trò</th>
                             <th>Trạng thái</th>
                             <th>Hành động</th>
                         </tr>
+                    </thead>
+                    <tbody>
                         {arrUsers && arrUsers.length > 0 &&
-                            arrUsers.map((item, index) => {
+                            arrUsers.filter(user => user.id !== userInfo.id).map((item, index) => {
                                 let date = moment.unix(item.birthday / 1000).format('DD/MM/YYYY')
                                 return (
                                     <tr key={index}>
@@ -94,9 +104,11 @@ class TableManageUser extends Component {
                                         <td>{`${item.lastName} ${item.firstName}`}</td>
                                         <td>{date}</td>
                                         <td>{item.address}</td>
+                                        <td>{item.roleData.value}</td>
                                         <td>{item.statusId === 'S1' ? "Đang hoạt động" : "Vô hiệu hoá"} </td>
                                         <td>
-                                            <div className='btn-table-manage-user'>
+                                            <div className='btn-manage'
+                                            >
                                                 <button
                                                     className='btn-edit'
                                                     onClick={() => this.handleEditUser(item)}
@@ -135,7 +147,8 @@ class TableManageUser extends Component {
 
 const mapStateToProps = state => {
     return {
-        listUsers: state.admin.users
+        listUsers: state.admin.users,
+        userInfo: state.user.userInfo,
     };
 };
 

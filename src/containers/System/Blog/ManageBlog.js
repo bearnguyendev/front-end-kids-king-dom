@@ -28,10 +28,15 @@ class ManageBlog extends Component {
             subjectId: '',
             arrSubject: '',
             isOpen: false,
+            errMessage: ""
         }
     }
     componentDidMount() {
-        this.props.fetchAllBlogs()
+        this.props.fetchAllBlogs({
+            statusId: "ALL",
+            subjectId: "ALL",
+            valueSearch: "ALL"
+        });
         this.props.fetchAllcodeSubjects()
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -67,7 +72,11 @@ class ManageBlog extends Component {
                 let res = await createNewBlogService(this.state)
                 if (res && res.errCode === 0) {
                     toast.success(res.errMessage);
-                    this.props.fetchAllBlogs();
+                    this.props.fetchAllBlogs({
+                        statusId: "ALL",
+                        subjectId: "ALL",
+                        valueSearch: "ALL"
+                    });
                 } else {
                     toast.error(res.errMessage)
                 }
@@ -76,7 +85,11 @@ class ManageBlog extends Component {
                 let res = await editBlogService(this.state)
                 if (res && res.errCode === 0) {
                     toast.success(res.errMessage);
-                    this.props.fetchAllBlogs();
+                    this.props.fetchAllBlogs({
+                        statusId: "ALL",
+                        subjectId: "ALL",
+                        valueSearch: "ALL"
+                    });
                 } else {
                     toast.error(res.errMessage)
                 }
@@ -159,15 +172,8 @@ class ManageBlog extends Component {
                 </div>
                 <div className='manage-blog-body'>
                     <div className='container'>
+
                         <div className='row'>
-                            <div className='col-12 my-3' style={{ fontWeight: '600' }}>
-                                <FormattedMessage id={"manage-blog.list"} />
-                            </div>
-                            <div className='col-12 shadow pt-3 mb-5 bg-white rounded'>
-                                <TableManageBlog
-                                    handleEditBlogFromParentKey={this.handleEditBlogFromParent}
-                                />
-                            </div>
                             <div className='col-12 my-3' style={{ fontWeight: '600' }}>
                                 {this.state.action === CRUD_ACTIONS.EDIT ? <FormattedMessage id={"manage-blog.update"} /> : <FormattedMessage id={"manage-blog.add"} />}
                             </div>
@@ -231,7 +237,18 @@ class ManageBlog extends Component {
                             </div>
 
                         </div>
-
+                        <div className="card mb-4">
+                            <div className="card-header">
+                                <i className="fas fa-table me-1" />
+                                &nbsp;
+                                <FormattedMessage id={"manage-blog.list"} />
+                            </div>
+                            <div className="card-body rounded">
+                                <TableManageBlog
+                                    handleEditBlogFromParentKey={this.handleEditBlogFromParent}
+                                />
+                            </div>
+                        </div>
                         {
                             isOpen === true &&
                             <Lightbox
@@ -256,7 +273,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchAllBlogs: () => dispatch(actions.fetchAllBlogs()),
+        fetchAllBlogs: (data) => dispatch(actions.fetchAllBlogs(data)),
         fetchAllcodeSubjects: () => dispatch(actions.fetchAllcodeSubjects())
     };
 };

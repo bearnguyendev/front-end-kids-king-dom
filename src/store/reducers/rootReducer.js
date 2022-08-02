@@ -7,6 +7,7 @@ import adminReducer from "./adminReducer";
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
+import cartReducer from './cartReducer';
 
 const persistCommonConfig = {
     storage: storage,
@@ -23,11 +24,17 @@ const appPersistConfig = {
     key: 'app',
     whitelist: ['language']
 };
-
+const cartPersistConfig = {
+    ...persistCommonConfig,
+    key: 'cart',
+    whitelist: ['listCartItem']
+};
 export default (history) => combineReducers({
     router: connectRouter(history),
     user: persistReducer(userPersistConfig, userReducer),
     //user: userReducer,
     app: persistReducer(appPersistConfig, appReducer),
+    cart: persistReducer(cartPersistConfig, cartReducer),
+    //cart: cartReducer,
     admin: adminReducer,
 })

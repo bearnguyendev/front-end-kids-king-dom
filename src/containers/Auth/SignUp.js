@@ -98,7 +98,7 @@ class SignUp extends Component {
                     this.setState({
                         status: true
                     })
-                }, 4000);
+                }, 3000);
             }
         } catch (error) {
             if (error.response) {
@@ -201,7 +201,7 @@ class SignUp extends Component {
                                     <FormattedMessage id={"auth.phoneNumber"} />
                                 </label>
                                 <input
-                                    type="text"
+                                    type="tel"
                                     className="form-control"
                                     placeholder="Nhập số điện thoại"
                                     value={this.state.phoneNumber}

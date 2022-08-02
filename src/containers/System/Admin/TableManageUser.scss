@@ -20,9 +20,21 @@
   background-color: #09a5c8;
   color: white;
 }
-.btn-table-manage-user{
-  display: flex;
+.btn-manage{
+    display: flex;
     justify-content: space-evenly;
+    font-size: 20px;
+    .btn-save{
+      width: 30px;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: #666;
+      &:hover{
+        background-color: transparent !important;
+        color: rgba(36, 65, 232, 0.862) !important;
+      }
+    }
     .btn-edit{
       width: 30px;
       border: none;

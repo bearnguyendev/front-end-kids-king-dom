@@ -27,6 +27,7 @@ class ManageVoucher extends Component {
             codeVoucher: '',
             action: '',
             id: '',
+            errMessage: ""
         }
     }
     componentDidMount() {
@@ -154,7 +155,7 @@ class ManageVoucher extends Component {
     }
     render() {
         let { typeVoucherId, fromDate, codeVoucher, number, arrTypeVoucher, toDate } = this.state;
-        console.log("check state: ", this.state);
+        console.log("check arrTypevoucher: ", arrTypeVoucher);
         return (
             <div className='manage-voucher-container'>
                 <div className="title" >
@@ -175,7 +176,9 @@ class ManageVoucher extends Component {
                                     {arrTypeVoucher && arrTypeVoucher.length > 0 &&
                                         arrTypeVoucher.map((item, index) => {
                                             return (
-                                                <option key={index} value={item.id}>{item.value}{item.typeVoucherData.value}</option>
+                                                <option key={index} value={item.id}>
+                                                    {item.type === 'percent' ? item.value + "%" : item.value.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}
+                                                </option>
                                             )
                                         })}
                                 </select>
@@ -223,10 +226,14 @@ class ManageVoucher extends Component {
                                     {this.state.action === CRUD_ACTIONS.EDIT ? <FormattedMessage id={"manage-voucher.edit"} /> : <FormattedMessage id={"manage-voucher.save"} />}
                                 </button>
                             </div>
-                            <div className='col-12 my-3' style={{ fontWeight: '600' }}>
+                        </div>
+                        <div className="card mb-4">
+                            <div className="card-header">
+                                <i className="fas fa-table me-1" />
+                                &nbsp;
                                 <FormattedMessage id={"manage-voucher.list"} />
                             </div>
-                            <div className='col-12 shadow pt-3 mb-5 bg-white rounded'>
+                            <div className="card-body rounded">
                                 <TableManageVoucher
                                     handleEditVoucherFromParentKey={this.handleEditVoucherFromParent}
                                 />

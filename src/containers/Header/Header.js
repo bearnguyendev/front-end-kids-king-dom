@@ -9,7 +9,6 @@ import { FormattedMessage } from 'react-intl';
 import _ from 'lodash';
 import { Link } from 'react-router-dom';
 class Header extends Component {
-
     render() {
         const { processLogout, language, userInfo } = this.props;
         return (
@@ -20,17 +19,19 @@ class Header extends Component {
                 </div>
 
                 <div className='header-infor'>
-                    <span className='header-infor-img'
-                        style={{ backgroundImage: `url(${userInfo && userInfo.image ? userInfo.image : 'https://www.seekpng.com/png/detail/428-4287240_no-avatar-user-circle-icon-png.png'})` }}
-                    //${userInfo && userInfo.image ? userInfo.image : ''}
-                    >
-                    </span>
+                    <Link to={`/user/detail/${userInfo.id}`}>
+                        <div className='header-infor-img'
+                            style={{ backgroundImage: `url(${userInfo && userInfo.image ? userInfo.image : 'https://www.seekpng.com/png/detail/428-4287240_no-avatar-user-circle-icon-png.png'})` }}
+                        >
+
+                        </div>
+                    </Link>
                     <span className='welcome'>
                         <FormattedMessage id={"home-header.welcome"} />
                         {userInfo && !_.isEmpty(userInfo) ? `${userInfo.lastName} ${userInfo.firstName}` : ''}!
                     </span>
                     <div className='header-btn-change-password'>
-                        <Link to={`/change-password/${userInfo.id}`} style={{ color: "inherit" }} >
+                        <Link to={`change-password/${userInfo.id}`} style={{ color: "inherit" }} >
                             <i className="fas fa-unlock"></i>
                         </Link>
                     </div>

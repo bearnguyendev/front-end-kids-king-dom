@@ -42,7 +42,7 @@ class ManageBrand extends Component {
                 // fire redux create brand
                 let res = await createANewAllCode({
                     type: 'BRAND',
-                    keyMap: `TH-${keyMap ? keyMap : new Date().getTime()}`,
+                    keyMap: keyMap ? keyMap : new Date().getTime(),
                     value: this.state.value,
                 })
                 if (res && res.errCode === 0) {
@@ -134,10 +134,14 @@ class ManageBrand extends Component {
                                     {this.state.action === CRUD_ACTIONS.EDIT ? <FormattedMessage id={"manage-brand.edit"} /> : <FormattedMessage id={"manage-brand.save"} />}
                                 </button>
                             </div>
-                            <div className='col-12 my-3' style={{ fontWeight: '600' }}>
+                        </div>
+                        <div className="card mb-4">
+                            <div className="card-header">
+                                <i className="fas fa-table me-1" />
+                                &nbsp;
                                 <FormattedMessage id={"manage-brand.list"} />
                             </div>
-                            <div className='col-12 shadow pt-3 mb-5 bg-white rounded'>
+                            <div className="card-body rounded">
                                 <TableManageBrand
                                     handleEditBrandFromParentKey={this.handleEditBrandFromParent}
                                 />

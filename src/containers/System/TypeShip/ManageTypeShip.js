@@ -137,10 +137,14 @@ class ManageTypeShip extends Component {
                                     {this.state.action === CRUD_ACTIONS.EDIT ? <FormattedMessage id={"manage-type-ship.edit"} /> : <FormattedMessage id={"manage-type-ship.save"} />}
                                 </button>
                             </div>
-                            <div className='col-12 my-3' style={{ fontWeight: '600' }}>
+                        </div>
+                        <div className="card mb-4">
+                            <div className="card-header">
+                                <i className="fas fa-table me-1" />
+                                &nbsp;
                                 <FormattedMessage id={"manage-type-ship.list"} />
                             </div>
-                            <div className='col-12 mb-5'>
+                            <div className="card-body rounded">
                                 <TableManageTypeShip
                                     handleEditTypeShipFromParentKey={this.handleEditTypeShipFromParent}
                                 />

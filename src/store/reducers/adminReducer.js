@@ -10,12 +10,24 @@ const initialState = {
     discounts: [],
     sizes: [],
     products: [],
+    topProducts: [],
+    newProducts: [],
     productImage: [],
     banners: [],
+    listBanners: [],
     typeShips: [],
     blogs: [],
+    listBlogs: [],
     typeVouchers: [],
-    vouchers: []
+    vouchers: [],
+    voucherByUserId: [],
+    receivers: [],
+    user: {},
+    ordersOfUser: [],
+    statusOrder: [],
+    orders: [],
+    orderById: {},
+    commentProduct: {},
 }
 const adminReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -131,6 +143,20 @@ const adminReducer = (state = initialState, action) => {
             return {
                 ...state,
             }
+        case actionTypes.FETCH_ALLCODE_STATUS_ORDER_START:
+            return {
+                ...state,
+            }
+        case actionTypes.FETCH_ALLCODE_STATUS_ORDER_SUCCESS:
+            state.statusOrder = action.dataStatusOrder;
+            return {
+                ...state,
+            }
+        case actionTypes.FETCH_ALLCODE_STATUS_ORDER_FAILED:
+            state.statusOrder = [];
+            return {
+                ...state,
+            }
         case actionTypes.FETCH_ALL_USER_START:
             return {
                 ...state,
@@ -145,6 +171,20 @@ const adminReducer = (state = initialState, action) => {
             return {
                 ...state,
             }
+        case actionTypes.FETCH_DETAIL_USER_BY_ID_START:
+            return {
+                ...state,
+            }
+        case actionTypes.FETCH_DETAIL_USER_BY_ID_SUCCESS:
+            state.user = action.dataAUser;
+            return {
+                ...state,
+            }
+        case actionTypes.FETCH_DETAIL_USER_BY_ID_FAILED:
+            state.user = {};
+            return {
+                ...state,
+            }
         case actionTypes.FETCH_ALL_PRODUCT_START:
             return {
                 ...state,
@@ -156,6 +196,34 @@ const adminReducer = (state = initialState, action) => {
             }
         case actionTypes.FETCH_ALL_PRODUCT_FAILED:
             state.products = [];
+            return {
+                ...state,
+            }
+        case actionTypes.FETCH_TOP_PRODUCT_START:
+            return {
+                ...state,
+            }
+        case actionTypes.FETCH_TOP_PRODUCT_SUCCESS:
+            state.topProducts = action.dataTopProduct;
+            return {
+                ...state,
+            }
+        case actionTypes.FETCH_TOP_PRODUCT_FAILED:
+            state.topProducts = [];
+            return {
+                ...state,
+            }
+        case actionTypes.FETCH_NEW_PRODUCT_START:
+            return {
+                ...state,
+            }
+        case actionTypes.FETCH_NEW_PRODUCT_SUCCESS:
+            state.newProducts = action.dataNewProduct;
+            return {
+                ...state,
+            }
+        case actionTypes.FETCH_NEW_PRODUCT_FAILED:
+            state.newProducts = [];
             return {
                 ...state,
             }
@@ -187,6 +255,20 @@ const adminReducer = (state = initialState, action) => {
             return {
                 ...state,
             }
+        case actionTypes.FETCH_LIST_BANNER_START:
+            return {
+                ...state,
+            }
+        case actionTypes.FETCH_LIST_BANNER_SUCCESS:
+            state.listBanners = action.dataListBanner;
+            return {
+                ...state,
+            }
+        case actionTypes.FETCH_LIST_BANNER_FAILED:
+            state.listBanners = [];
+            return {
+                ...state,
+            }
         case actionTypes.FETCH_ALL_TYPE_SHIP_START:
             return {
                 ...state,
@@ -215,6 +297,20 @@ const adminReducer = (state = initialState, action) => {
             return {
                 ...state,
             }
+        case actionTypes.FETCH_LIST_BLOG_START:
+            return {
+                ...state,
+            }
+        case actionTypes.FETCH_LIST_BLOG_SUCCESS:
+            state.listBlogs = action.dataListBlog;
+            return {
+                ...state,
+            }
+        case actionTypes.FETCH_LIST_BLOG_FAILED:
+            state.listBlogs = [];
+            return {
+                ...state,
+            }
         case actionTypes.FETCH_ALL_TYPE_VOUCHER_START:
             return {
                 ...state,
@@ -240,6 +336,91 @@ const adminReducer = (state = initialState, action) => {
             }
         case actionTypes.FETCH_ALL_VOUCHER_FAILED:
             state.vouchers = [];
+            return {
+                ...state,
+            }
+        case actionTypes.FETCH_ALL_VOUCHER_BY_USER_ID_START:
+            return {
+                ...state,
+            }
+        case actionTypes.FETCH_ALL_VOUCHER_BY_USER_ID_SUCCESS:
+            state.voucherByUserId = action.dataVoucherByUserId;
+            return {
+                ...state,
+            }
+        case actionTypes.FETCH_ALL_VOUCHER_BY_USER_ID_FAILED:
+            state.voucherByUserId = [];
+            return {
+                ...state,
+            }
+        case actionTypes.FETCH_ALL_RECEIVER_BY_USER_ID_START:
+            return {
+                ...state,
+            }
+        case actionTypes.FETCH_ALL_RECEIVER_BY_USER_ID_SUCCESS:
+            state.receivers = action.dataReceiver;
+            return {
+                ...state,
+            }
+        case actionTypes.FETCH_ALL_RECEIVER_BY_USER_ID_FAILED:
+            state.receivers = [];
+            return {
+                ...state,
+            }
+        case actionTypes.FETCH_ALL_ORDER_BY_USER_ID_START:
+            return {
+                ...state,
+            }
+        case actionTypes.FETCH_ALL_ORDER_BY_USER_ID_SUCCESS:
+            state.ordersOfUser = action.dataOrderOfUser;
+            return {
+                ...state,
+            }
+        case actionTypes.FETCH_ALL_ORDER_BY_USER_ID_FAILED:
+            state.ordersOfUser = [];
+            return {
+                ...state,
+            }
+        case actionTypes.FETCH_ALL_ORDER_START:
+            return {
+                ...state,
+            }
+        case actionTypes.FETCH_ALL_ORDER_SUCCESS:
+            state.orders = action.dataOrders;
+            return {
+                ...state,
+            }
+        case actionTypes.FETCH_ALL_ORDER_FAILED:
+            state.orders = [];
+            return {
+                ...state,
+            }
+        case actionTypes.FETCH_ORDER_BY_ID_START:
+            return {
+                ...state,
+            }
+        case actionTypes.FETCH_ORDER_BY_ID_SUCCESS:
+            state.orderById = action.dataOrderById;
+            return {
+                ...state,
+            }
+        case actionTypes.FETCH_ORDER_BY_ID_FAILED:
+            state.orderById = {};
+            return {
+                ...state,
+            }
+        case actionTypes.FETCH_ALL_COMMENT_BY_PRODUCT_ID_START:
+            console.log("check fetch all  comment");
+            return {
+                ...state,
+            }
+        case actionTypes.FETCH_ALL_COMMENT_BY_PRODUCT_ID_SUCCESS:
+            state.commentProduct = action.dataCommentProduct;
+            return {
+                ...state,
+            }
+        case actionTypes.FETCH_ALL_COMMENT_BY_PRODUCT_ID_FAILED:
+            state.commentProduct = [];
             return {
                 ...state,
             }

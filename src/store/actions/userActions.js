@@ -8,11 +8,10 @@ export const userLoginSuccess = (userInfo) => ({
     type: actionTypes.USER_LOGIN_SUCCESS,
     userInfo: userInfo
 })
-export const adminLoginSuccess = (userInfo) => ({
-    type: actionTypes.ADMIN_LOGIN_SUCCESS,
+export const updateUserInfo = (userInfo) => ({
+    type: actionTypes.UPDATE_USER_INFO,
     userInfo: userInfo
 })
-
 export const userLoginFail = () => ({
     type: actionTypes.USER_LOGIN_FAIL
 })

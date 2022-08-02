@@ -1,149 +1,52 @@
 import React, { Component } from 'react';
+import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import Slider from "react-slick";
-//import * as actions from "../../../store/actions"
-import { FormattedMessage } from 'react-intl';
-import { LANGUAGES } from '../../../utils';
+import * as actions from "../../../store/actions"
 import { withRouter } from 'react-router';
-class MedicalFacility extends Component {
+import { LIMIT } from "../../../utils";
+import SliderProduct from './SliderProduct';
+class NewProduct extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            dataNewProduct: []
+            arrProduct: []
         }
     }
-    componentDidMount() {
-        //this.props.fetchTopNewProduct()
-    }
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (prevProps.allNewProduct !== this.props.allNewProduct) {
+        if (prevProps.newProductRedux !== this.props.newProductRedux) {
             this.setState({
-                dataNewProduct: this.props.allNewProduct
+                arrProduct: this.props.newProductRedux
             })
         }
     }
-    handleViewDetailClinic = (newproduct) => {
-        this.props.history.push(`/detail-new-product/${newproduct.id}`)
+    componentDidMount() {
+        let limit = LIMIT
+        let typeSort = 'createdAt'
+        this.props.loadNewProducts(limit, typeSort);
+    }
+    handleViewCategory = () => {
+        if (this.props.history) {
+            this.props.history.push(`/category`)
+        }
     }
     render() {
-        let { language } = this.props;
-        let { dataNewProduct } = this.state;
+        let allProducts = this.state.arrProduct;
+        //allProducts = allProducts.concat(allProducts)
         return (
-            <div className='section-share section-new-product'>
+            <div className='section-share section-top-product'>
                 <div className='section-container'>
                     <div className='section-header'>
-                        <span className='title-section'>
-                            <FormattedMessage id={"home-page.outstanding-new-product"} />
+                        <span className='title-section'><FormattedMessage id={"home-page.new-product"} />
                         </span>
-                        <button className='btn-section'>
-                            <FormattedMessage id={"home-page.more-infor"} />
-                        </button>
+                        <button className='btn-section' onClick={() => this.handleViewCategory()}><FormattedMessage id={"home-page.more-infor"} /></button>
                     </div>
-                    <div className='section-body'>
-                        <Slider {...this.props.settings}>
-                            {/* {dataNewProduct && dataNewProduct.length > 0 &&
-                                dataNewProduct.map((item, index) => {
-                                    return (
-                                        <div className='section-customize' key={index}
-                                            onClick={() => this.handleViewDetailClinic(item)}
-                                        >
-                                            <div className='customize-border'>
-                                                <div className='bg-image section-new-product'
-                                                    style={{ backgroundImage: `url(${item.image})` }}
-                                                ></div>
-                                                <div className='new-product text-center'>
-                                                    <div>
-                                                        {language === LANGUAGES.VI ? item.nameVi : item.nameEn}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )
-                                })} */}
-                            <div className='section-customize'>
-                                <div className='customize-border'>
-                                    <div className='bg-image section-new-product'>
-
-                                    </div>
-                                    <div className='new-product text-center'>
-                                        <div>
-                                            name 1
-                                        </div>
-                                    </div>
-                                    <div className='box-view-cart'>
-                                        <span title='Xem chi tiết'>
-                                            {/* <ion-icon name="eye-outline" title={false}></ion-icon> */}
-                                            <i class="fas fa-eye"></i>
-                                        </span>
-                                        &emsp;
-                                        <span title='Thêm vào giỏ hàng'>
-                                            {/* <ion-icon name="cart-outline" title={false}></ion-icon> */}
-                                            <i class="fas fa-shopping-cart"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className='section-customize'
-
-                            >
-                                <div className='customize-border'>
-                                    <div className='bg-image section-new-product'
-
-                                    ></div>
-                                    <div className='new-product text-center'>
-                                        <div>
-                                            name 2
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className='section-customize'
-
-                            >
-                                <div className='customize-border'>
-                                    <div className='bg-image section-new-product'
-
-                                    ></div>
-                                    <div className='new-product text-center'>
-                                        <div>
-                                            name 3
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className='section-customize'
-
-                            >
-                                <div className='customize-border'>
-                                    <div className='bg-image section-new-product'
-
-                                    ></div>
-                                    <div className='new-product text-center'>
-                                        <div>
-                                            name 4
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className='section-customize'
-
-                            >
-                                <div className='customize-border'>
-                                    <div className='bg-image section-new-product'
-
-                                    ></div>
-                                    <div className='new-product text-center'>
-                                        <div>
-                                            name 5
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </Slider>
-                    </div>
+                    <SliderProduct
+                        allProducts={allProducts}
+                        settings={this.props.settings}
+                    />
                 </div>
-
-            </div>
+            </div >
 
         );
     }
@@ -153,16 +56,14 @@ class MedicalFacility extends Component {
 const mapStateToProps = state => {
     return {
         isLoggedIn: state.user.isLoggedIn,
-        language: state.app.language,
-        allNewProduct: state.admin.allNewProduct
+        newProductRedux: state.admin.newProducts,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        //fetchTopNewProduct: () => dispatch(actions.fetchTopNewProduct())
-
+        loadNewProducts: (limit, typeSort) => dispatch(actions.fetchNewProducts(limit, typeSort))
     };
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(MedicalFacility));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(NewProduct));

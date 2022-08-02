@@ -42,7 +42,8 @@ class ManageProduct extends Component {
             desHTML: '',
             action: '',
             id: '',
-            oldImage: ''
+            oldImage: '',
+            errMessage: ""
         }
     }
     componentDidMount() {
@@ -51,6 +52,7 @@ class ManageProduct extends Component {
         this.props.fetchAllcodeWarranties()
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
+        window.scrollTo(0, 0);
         if (prevState.percentDiscount !== this.state.percentDiscount || prevState.originalPrice !== this.state.originalPrice) {
             let { originalPrice, percentDiscount } = this.state;
             let discountPrice = originalPrice - (originalPrice * percentDiscount / 100)
@@ -181,7 +183,12 @@ class ManageProduct extends Component {
                 let res = await createNewProduct(this.state)
                 if (res && res.errCode === 0) {
                     toast.success(res.errMessage)
-                    this.props.fetchProductRedux("ALL")
+                    this.props.fetchProductRedux({
+                        statusId: "ALL",
+                        categoryId: "ALL",
+                        brandId: "ALL",
+                        valueSearch: "ALL"
+                    })
                 } else {
                     toast.error(res.errMessage)
                 }
@@ -190,13 +197,24 @@ class ManageProduct extends Component {
                 let res = await editProductService(this.state)
                 if (res && res.errCode === 0) {
                     toast.success(res.errMessage)
-                    this.props.fetchProductRedux("ALL")
+                    this.props.fetchProductRedux({
+                        statusId: "ALL",
+                        categoryId: "ALL",
+                        brandId: "ALL",
+                        valueSearch: "ALL"
+                    })
                 } else {
                     toast.error(res.errMessage)
                 }
             }
         } catch (error) {
-            console.log(error);
+            if (error.response) {
+                if (error.response.data) {
+                    this.setState({
+                        errMessage: error.response.data.message
+                    })
+                }
+            }
         }
 
     }
@@ -226,6 +244,7 @@ class ManageProduct extends Component {
             action: CRUD_ACTIONS.EDIT,
             id: product.id,
         })
+        this.clickBtnMove("add-edit")
     }
     clickBtnMove = (id) => {
         document.getElementById(id).scrollIntoView();
@@ -245,7 +264,7 @@ class ManageProduct extends Component {
                                 <button type="button" onClick={() => this.clickBtnMove("list")} ><FormattedMessage id={"manage-product.list"} /></button>
                             </li>
                             <li>
-                                <button type="button" onClick={() => this.clickBtnMove("add")} ><FormattedMessage id={"manage-product.title-add"} /></button>
+                                <button type="button" onClick={() => this.clickBtnMove("add-edit")} >{this.state.action === CRUD_ACTIONS.EDIT ? <FormattedMessage id={"manage-product.title-update"} /> : <FormattedMessage id={"manage-product.title-add"} />}</button>
                             </li>
                             <li>
                                 <button onClick={() => this.clickBtnMove("header")}>Trở về đầu trang</button>
@@ -253,17 +272,19 @@ class ManageProduct extends Component {
                         </ul>
                     </div>
                     <div className='container'>
-                        <div className='title' id="list">
-                            <FormattedMessage id={"manage-product.list"} />
-                        </div>
-                        <div className='row'>
-                            <div className='col-12 shadow pt-3 mb-5 bg-white rounded'>
+                        <div className="card my-4">
+                            <div className="card-header" id='list'>
+                                <div className="title" >
+                                    <FormattedMessage id={"manage-product.list"} />
+                                </div>
+                            </div>
+                            <div className="card-body rounded">
                                 <TableManageProduct
                                     handleEditProductFromParentKey={this.handleEditProductFromParent}
                                 />
                             </div>
                         </div>
-                        <div className="title" id='add'>
+                        <div className="title" id='add-edit'>
                             {this.state.action === CRUD_ACTIONS.EDIT ? <FormattedMessage id={"manage-product.title-update"} /> : <FormattedMessage id={"manage-product.title-add"} />}
                         </div>
                         <div className='row'>
@@ -352,7 +373,7 @@ class ManageProduct extends Component {
                             <div className='col-3'>
                                 <label><FormattedMessage id={"manage-product.long"} /></label>
                                 <div className="input-group ">
-                                    <input type="number" class="form-control"
+                                    <input type="number" className="form-control"
                                         value={long}
                                         onChange={(event) => this.onChangeInput(event, 'long')} />
                                     <div className="input-group-append">
@@ -363,7 +384,7 @@ class ManageProduct extends Component {
                             <div className='col-3'>
                                 <label><FormattedMessage id={"manage-product.width"} /></label>
                                 <div className="input-group ">
-                                    <input type="number" class="form-control"
+                                    <input type="number" className="form-control"
                                         value={width}
                                         onChange={(event) => this.onChangeInput(event, 'width')} />
                                     <div className="input-group-append">
@@ -374,7 +395,7 @@ class ManageProduct extends Component {
                             <div className='col-3'>
                                 <label><FormattedMessage id={"manage-product.height"} /></label>
                                 <div className="input-group ">
-                                    <input type="number" class="form-control"
+                                    <input type="number" className="form-control"
                                         value={height}
                                         onChange={(event) => this.onChangeInput(event, 'height')} />
                                     <div className="input-group-append">
@@ -385,7 +406,7 @@ class ManageProduct extends Component {
                             <div className='col-3'>
                                 <label><FormattedMessage id={"manage-product.weight"} /></label>
                                 <div className="input-group ">
-                                    <input type="number" class="form-control"
+                                    <input type="number" className="form-control"
                                         value={weight}
                                         onChange={(event) => this.onChangeInput(event, 'weight')} />
                                     <div className="input-group-append">
@@ -416,7 +437,7 @@ class ManageProduct extends Component {
                             <div className='col-3'>
                                 <label><FormattedMessage id={"manage-product.originalPrice"} /></label>
                                 <div className="input-group ">
-                                    <input type="number" class="form-control"
+                                    <input type="number" className="form-control"
                                         value={originalPrice}
                                         onChange={(event) => this.onChangeInput(event, 'originalPrice')} />
                                     <div className="input-group-append">
@@ -427,7 +448,7 @@ class ManageProduct extends Component {
                             <div className='col-3 '>
                                 <label><FormattedMessage id={"manage-product.percentDiscount"} /></label>
                                 <div className="input-group ">
-                                    <input type="number" class="form-control"
+                                    <input type="number" className="form-control"
                                         value={percentDiscount}
                                         onChange={(event) => this.onChangeInput(event, 'percentDiscount')} />
                                     <div className="input-group-append">
@@ -438,7 +459,7 @@ class ManageProduct extends Component {
                             <div className='col-3 '>
                                 <label><FormattedMessage id={"manage-product.discountPrice"} /></label>
                                 <div className="input-group ">
-                                    <input type="text" class="form-control"
+                                    <input type="text" className="form-control"
                                         value={discountPrice}
                                         onChange={(event) => this.onChangeInput(event, 'discountPrice')}
                                         disabled={true} />
@@ -482,7 +503,7 @@ class ManageProduct extends Component {
                                     className={this.state.action === CRUD_ACTIONS.EDIT ? 'btn btn-warning px-3' : 'btn btn-primary px-3'}
                                     onClick={() => this.handleSaveProduct()}
                                 >
-                                    {this.state.action === CRUD_ACTIONS.EDIT ? <FormattedMessage id={"manage-user.edit"} /> : <FormattedMessage id={"manage-user.save"} />}
+                                    {this.state.action === CRUD_ACTIONS.EDIT ? <FormattedMessage id={"manage-product.edit"} /> : <FormattedMessage id={"manage-product.save"} />}
                                 </button>
                             </div>
 
@@ -519,7 +540,7 @@ const mapDispatchToProps = dispatch => {
         fetchAllcodeBrands: () => dispatch(actions.fetchAllcodeBrands()),
         fetchAllcodeWarranties: () => dispatch(actions.fetchAllcodeWarranties()),
         //fetchAllcodeSizes: () => dispatch(actions.fetchAllcodeSizes()),
-        fetchProductRedux: (statusId) => dispatch(actions.fetchAllProducts(statusId)),
+        fetchProductRedux: (data) => dispatch(actions.fetchAllProducts(data)),
     };
 };
 

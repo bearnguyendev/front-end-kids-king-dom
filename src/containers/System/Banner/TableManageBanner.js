@@ -15,7 +15,8 @@ class TableManageBanner extends Component {
         super(props);
         this.state = {
             arrBanners: [],
-            isOpen: false
+            isOpen: false,
+            errMessage: ""
         }
     }
 
@@ -69,7 +70,6 @@ class TableManageBanner extends Component {
 
         this.setState({
             isOpen: true,
-            id: item.id
         })
     }
     handleChangeStatusBanner = async (banner, type) => {
@@ -87,7 +87,13 @@ class TableManageBanner extends Component {
                 this.props.fetchAllBanners();
             }
         } catch (error) {
-            console.log(error);
+            if (error.response) {
+                if (error.response.data) {
+                    this.setState({
+                        errMessage: error.response.data.message
+                    })
+                }
+            }
             toast.error("Thao tác thất bại! Vui lòng thử lại sau.")
         }
     }

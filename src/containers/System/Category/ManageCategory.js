@@ -42,7 +42,7 @@ class ManageCategory extends Component {
                 // fire redux create category
                 let res = await createANewAllCode({
                     type: 'CATEGORY',
-                    keyMap: `DM-${keyMap ? keyMap : new Date().getTime()}`,
+                    keyMap: keyMap ? keyMap : new Date().getTime(),
                     value: this.state.value,
                 })
                 if (res && res.errCode === 0) {
@@ -134,10 +134,14 @@ class ManageCategory extends Component {
                                     {this.state.action === CRUD_ACTIONS.EDIT ? <FormattedMessage id={"manage-category.edit"} /> : <FormattedMessage id={"manage-category.save"} />}
                                 </button>
                             </div>
-                            <div className='col-12 my-3' style={{ fontWeight: '600' }}>
+                        </div>
+                        <div className="card mb-4">
+                            <div className="card-header">
+                                <i className="fas fa-table me-1" />
+                                &nbsp;
                                 <FormattedMessage id={"manage-category.list"} />
                             </div>
-                            <div className='col-12 shadow pt-3 mb-5 bg-white rounded'>
+                            <div className="card-body rounded">
                                 <TableManageCategory
                                     handleEditCategoryFromParentKey={this.handleEditCategoryFromParent}
                                 />

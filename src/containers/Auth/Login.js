@@ -35,17 +35,13 @@ class Login extends Component {
                 email: this.state.email,
                 password: this.state.password
             })
-            if (data && data.errCode !== 0) {
+            if (data.errCode !== 0) {
                 this.setState({
                     errMessage: data.errMessage
                 })
-            }
-            if (data && data.errCode === 0) {
-                if (data.user.roleId === 'R1') {
-                    this.props.adminLoginSuccess(data.user)
-                } else {
-                    this.props.userLoginSuccess(data.user)
-                }
+            } else {
+                this.props.userLoginSuccess(data.user)
+                this.props.fetchAllCartByUserId(data.user.id)
             }
         } catch (error) {
             if (error.response) {
@@ -82,7 +78,7 @@ class Login extends Component {
                                     <FormattedMessage id={"auth.email"} />
                                 </label>
                                 <input
-                                    type="text"
+                                    type="email"
                                     className="form-control"
                                     placeholder="Nhập email"
                                     value={this.state.email}
@@ -156,7 +152,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         navigate: (path) => dispatch(push(path)),
         userLoginSuccess: (userInfo) => dispatch(actions.userLoginSuccess(userInfo)),
-        adminLoginSuccess: (userInfo) => dispatch(actions.adminLoginSuccess(userInfo)),
+        fetchAllCartByUserId: (id) => dispatch(actions.fetchAllCartByUserId(id)),
     };
 };
 

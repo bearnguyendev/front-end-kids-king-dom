@@ -14,6 +14,7 @@ class ChangePassword extends Component {
             oldPassword: "",
             newPassword: "",
             rePassword: "",
+            errMessage: "",
             isShowOldPassword: false,
             isShowNewPassword: false,
             isShowRePassword: false,
@@ -32,6 +33,12 @@ class ChangePassword extends Component {
             errMessage: ""
         })
         try {
+            if (!this.state.oldPassword || !this.state.newPassword || !this.state.rePassword) {
+                this.setState({
+                    errMessage: "Vui lòng không bỏ trống!"
+                })
+                return;
+            }
             if (this.state.oldPassword === this.state.newPassword) {
                 this.setState({
                     errMessage: "Mật khẩu mới không được trùng với mật khẩu cũ!"
@@ -64,7 +71,7 @@ class ChangePassword extends Component {
                         this.setState({
                             isSuccess: true
                         })
-                    }, 5000);
+                    }, 3000);
                 }
             }
         } catch (error) {

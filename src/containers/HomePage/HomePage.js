@@ -3,14 +3,13 @@ import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import "./HomePage.scss";
 import HomeHeader from './HomeHeader';
-import HomeNav from './HomeNav';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import HomeFooter from './HomeFooter';
-import TopCategory from './Section/TopCategory';
 import NewProduct from './Section/NewProduct';
-import Blogs from './Section/Blogs';
+import Blog from './Section/Blog';
 import About from './Section/About';
+import TopProduct from './Section/TopProduct';
 class HomePage extends Component {
 
     constructor(props) {
@@ -36,9 +35,9 @@ class HomePage extends Component {
         return (
             <div>
                 <HomeHeader />
-                <TopCategory settings={settings} />
+                <TopProduct settings={settings} />
                 <NewProduct settings={settings} />
-                {/* <Blogs /> */}
+                <Blog settings={settings} />
                 <About />
                 <HomeFooter />
             </div>

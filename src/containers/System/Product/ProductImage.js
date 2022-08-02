@@ -24,6 +24,7 @@ class ProductImage extends Component {
             action: '',
             isOpenModalImage: false,
             id: '',
+            errMessage: ""
         }
     }
     componentDidMount() {
@@ -144,7 +145,13 @@ class ProductImage extends Component {
                 }
             }
         } catch (error) {
-            console.log(error)
+            if (error.response) {
+                if (error.response.data) {
+                    this.setState({
+                        errMessage: error.response.data.message
+                    })
+                }
+            }
         }
 
     }

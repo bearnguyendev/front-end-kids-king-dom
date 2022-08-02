@@ -15,12 +15,17 @@ class TableManageBlog extends Component {
         super(props);
         this.state = {
             arrBlogs: [],
-            isOpen: false
+            isOpen: false,
+            errMessage: ""
         }
     }
 
     async componentDidMount() {
-        this.props.fetchAllBlogs()
+        this.props.fetchAllBlogs({
+            statusId: "ALL",
+            subjectId: "ALL",
+            valueSearch: "ALL"
+        });
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevProps.listBlogs !== this.props.listBlogs) {
@@ -34,7 +39,11 @@ class TableManageBlog extends Component {
             let res = await deleteBlogService(id);
             if (res && res.errCode === 0) {
                 toast.success(res.errMessage);
-                this.props.fetchAllBlogs();
+                this.props.fetchAllBlogs({
+                    statusId: "ALL",
+                    subjectId: "ALL",
+                    valueSearch: "ALL"
+                });
             } else {
                 toast.error("Xoá bài đăng thất bại. Vui lòng thử lại sau.")
             }
@@ -69,7 +78,6 @@ class TableManageBlog extends Component {
 
         this.setState({
             isOpen: true,
-            id: item.id
         })
     }
     handleChangeStatusBlog = async (blog, type) => {
@@ -80,20 +88,33 @@ class TableManageBlog extends Component {
             })
             if (type === 'BAN') {
                 toast.success(`Ẩn bài đăng ${blog.title} thành công!`)
-                this.props.fetchAllBlogs();
+                this.props.fetchAllBlogs({
+                    statusId: "ALL",
+                    subjectId: "ALL",
+                    valueSearch: "ALL"
+                });
             }
             if (type === 'PERMIT') {
                 toast.success(`Hiện bài đăng ${blog.title} thành công!`)
-                this.props.fetchAllBlogs();
+                this.props.fetchAllBlogs({
+                    statusId: "ALL",
+                    subjectId: "ALL",
+                    valueSearch: "ALL"
+                });
             }
         } catch (error) {
-            console.log(error);
+            if (error.response) {
+                if (error.response.data) {
+                    this.setState({
+                        errMessage: error.response.data.message
+                    })
+                }
+            }
             toast.error("Thao tác thất bại! Vui lòng thử lại sau.")
         }
     }
     render() {
         let { arrBlogs, isOpen } = this.state
-        console.log("check arrrBlog", arrBlogs);
         return (
             <>
                 <table id='TableManageBlog'>
@@ -184,7 +205,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchAllBlogs: () => dispatch(actions.fetchAllBlogs())
+        fetchAllBlogs: (data) => dispatch(actions.fetchAllBlogs(data))
     };
 };
 

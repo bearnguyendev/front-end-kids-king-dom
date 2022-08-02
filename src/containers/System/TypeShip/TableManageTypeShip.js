@@ -63,7 +63,7 @@ class TableManageTypeShip extends Component {
                                     <tr key={index}>
                                         <td>{index + 1}</td>
                                         <td>{item.type}</td>
-                                        <td>{item.price}</td>
+                                        <td>{item.price.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}</td>
                                         <td>
                                             <div className='btn-table-manage-type-ship'>
                                                 <button

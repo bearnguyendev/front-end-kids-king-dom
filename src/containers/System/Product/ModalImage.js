@@ -98,7 +98,7 @@ class ModalImage extends Component {
                             <div className='col-6'>
                                 <label style={{ fontWeight: '600' }}>
                                     <FormattedMessage id={"product-image.nameImg"} /></label>
-                                <input type='title' className='input'
+                                <input type='text' className='input'
                                     onChange={(event) => this.handleOnChangeInput(event, "title")}
                                     value={this.state.title} />
                             </div>

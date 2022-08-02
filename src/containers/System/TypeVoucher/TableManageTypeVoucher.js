@@ -11,7 +11,8 @@ class TableManageTypeVoucher extends Component {
         super(props);
         this.state = {
             arrTypeVouchers: [],
-            isOpen: false
+            isOpen: false,
+            errMessage: ""
         }
     }
 
@@ -71,9 +72,9 @@ class TableManageTypeVoucher extends Component {
                                         <tr key={index}>
                                             <td>{index + 1}</td>
                                             <td>{item.typeVoucherData.value}</td>
-                                            <td>{item.value} {item.typeVoucherData.value}</td>
-                                            <td>{item.minValue} {'VND'}</td>
-                                            <td>{item.maxValue ? item.maxValue + 'VND' : ''}</td>
+                                            <td>{item.typeVoucherData.value === '%' ? item.value + item.typeVoucherData.value : item.value.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}</td>
+                                            <td>{item.minValue.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}</td>
+                                            <td>{item.maxValue ? item.maxValue.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }) : ''}</td>
                                             <td>
                                                 <div className='btn-table-manage-type-voucher'>
                                                     <button
