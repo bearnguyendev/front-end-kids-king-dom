@@ -51,7 +51,7 @@ const createNewProduct = (data) => {
     return axios.post(`/api/create-new-product`, data)
 }
 const getAllProducts = (data) => {
-    return axios.get(`/api/get-all-product?statusId=${data.statusId}&&categoryId=${data.categoryId}&&brandId=${data.brandId}&&sortName=${data.sortName}&&sortPrice=${data.sortPrice}&&sortPercent=${data.sortPercent}&&valueSearch=${data.valueSearch}&&sortView=${data.sortView}&&sortCreatedAt=${data.sortCreatedAt}`)
+    return axios.get(`/api/get-all-product?statusId=${data.statusId}&&categoryId=${data.categoryId}&&brandId=${data.brandId}&&sortName=${data.sortName}&&sortPrice=${data.sortPrice}&&sortPercent=${data.sortPercent}&&valueSearch=${data.valueSearch}&&sortView=${data.sortView}&&sortCreatedAt=${data.sortCreatedAt}&&sortCount=${data.sortCount}`)
 }
 const getDetailProductById = (id) => {
     return axios.get(`/api/get-detail-product-by-id?id=${id}`)
@@ -62,8 +62,8 @@ const getTopProductHomePage = (limit, typeSort) => {
 const editProductService = (data) => {
     return axios.put('/api/update-product', data)
 }
-const deleteProductService = (productId) => {
-    return axios.delete('/api/delete-product', { data: { id: productId } })
+const deleteProductService = (data) => {
+    return axios.delete('/api/delete-product', { data: data })
 }
 const handleChangeStatusProduct = (data) => {
     return axios.put('/api/change-status-product', data)
@@ -180,6 +180,10 @@ const getAllCartByUserIdService = (userId) => {
 const deleteItemCartService = (productId) => {
     return axios.delete(`/api/delete-item-cart`, { data: { productId: productId } })
 }
+const deleteItemCartByUserIdService = (userId) => {
+    return axios.delete(`/api/delete-item-cart-by-user-id`, { data: { userId: userId } })
+}
+
 
 const createNewReceiverService = (data) => {
     return axios.post(`/api/create-new-receiver`, data)
@@ -229,5 +233,5 @@ const getAllCommentByProductIdService = (productId) => {
     return axios.get(`/api/get-all-comment-by-product-id?id=${productId}`)
 }
 export {
-    handleLogin, sendForgotPassword, handleResetPassword, getAllCodeService, getDetailUserById, createANewUser, deleteUserService, editUserService, getAllUsers, handleChangePassword, handleChangeStatusUser, handleSendVerifyEmail, handleVerifyEmail, editAllCodeService, deleteAllCodeService, createANewAllCode, createNewProduct, getAllProducts, getDetailProductById, getTopProductHomePage, editProductService, handleChangeStatusProduct, deleteProductService, getAllProductImageFromProductService, createNewProductImageService, editProductImageService, deleteProductImageService, getAllBanners, getListBanners, createNewBannerService, editBannerService, deleteBannerService, handleChangeStatusBanner, createNewTypeShipService, editTypeShipService, deleteTypeShipService, getAllTypeShips, createNewBlogService, editBlogService, deleteBlogService, getAllBlogs, getDetailBlogById, getListBlogs, handleChangeStatusBlog, createNewTypeVoucherService, editTypeVoucherService, deleteTypeVoucherService, getAllTypeVouchers, createNewVoucherService, editVoucherService, deleteVoucherService, getAllVouchers, saveUserVoucherService, getDetailVoucherById, getAllVoucherByUserId, handleAddCartService, getAllCartByUserIdService, deleteItemCartService, createNewReceiverService, editReceiverService, deleteReceiverService, getAllReceiverByUserIdService, getDetailReceiverById, createNewOrderService, updateStatusOrderService, getDetailOrderByIdService, getAllOrderByUserIdService, getAllOrderService, handleChangeStatusService, createNewCommentService, replyComment, deleteCommentService, getAllCommentByProductIdService
+    handleLogin, sendForgotPassword, handleResetPassword, getAllCodeService, getDetailUserById, createANewUser, deleteUserService, editUserService, getAllUsers, handleChangePassword, handleChangeStatusUser, handleSendVerifyEmail, handleVerifyEmail, editAllCodeService, deleteAllCodeService, createANewAllCode, createNewProduct, getAllProducts, getDetailProductById, getTopProductHomePage, editProductService, handleChangeStatusProduct, deleteProductService, getAllProductImageFromProductService, createNewProductImageService, editProductImageService, deleteProductImageService, getAllBanners, getListBanners, createNewBannerService, editBannerService, deleteBannerService, handleChangeStatusBanner, createNewTypeShipService, editTypeShipService, deleteTypeShipService, getAllTypeShips, createNewBlogService, editBlogService, deleteBlogService, getAllBlogs, getDetailBlogById, getListBlogs, handleChangeStatusBlog, createNewTypeVoucherService, editTypeVoucherService, deleteTypeVoucherService, getAllTypeVouchers, createNewVoucherService, editVoucherService, deleteVoucherService, getAllVouchers, saveUserVoucherService, getDetailVoucherById, getAllVoucherByUserId, handleAddCartService, getAllCartByUserIdService, deleteItemCartService, deleteItemCartByUserIdService, createNewReceiverService, editReceiverService, deleteReceiverService, getAllReceiverByUserIdService, getDetailReceiverById, createNewOrderService, updateStatusOrderService, getDetailOrderByIdService, getAllOrderByUserIdService, getAllOrderService, handleChangeStatusService, createNewCommentService, replyComment, deleteCommentService, getAllCommentByProductIdService
 }

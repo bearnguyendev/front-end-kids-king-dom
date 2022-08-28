@@ -228,7 +228,7 @@ class ManageVoucher extends Component {
                             </div>
                         </div>
                         <div className="card mb-4">
-                            <div className="card-header">
+                            <div className="card-header font-weight-bold">
                                 <i className="fas fa-table me-1" />
                                 &nbsp;
                                 <FormattedMessage id={"manage-voucher.list"} />

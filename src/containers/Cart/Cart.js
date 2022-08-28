@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
-import { createNewReceiverService, deleteItemCartService, handleSendVerifyEmail } from '../../services/userService';
+import { createNewReceiverService, deleteItemCartByUserIdService, deleteItemCartService, handleSendVerifyEmail } from '../../services/userService';
 import * as actions from "../../store/actions";
 import HomeNav from '../HomePage/HomeNav';
 import HomeFooter from '../HomePage/HomeFooter';
@@ -140,31 +140,48 @@ class Cart extends Component {
             id: item.id
         })
     }
-    handleOrder = async () => {
-        this.setState({
-            isShowLoading: true
-        })
-        let { arrReceiver } = this.state
-        if (arrReceiver && arrReceiver.length > 0) {
-            let { userInfo } = this.props
-            if (userInfo.ActiveEmail === 1) {
-                this.props.history.push(`/order/${userInfo.id}`);
+    handleDeleteCart = async (userId) => {
+        try {
+            let res = await deleteItemCartByUserIdService(userId)
+            if (res && res.errCode === 0) {
+                toast.success(res.errMessage)
+                this.props.fetchAllCartByUserId(userId)
             } else {
-                let res = await handleSendVerifyEmail({ id: userInfo.id })
+                toast.error(res.errMessage)
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    handleOrder = async (itemCart) => {
+        if (itemCart.length <= 0) {
+            toast.error("Giỏ hàng rỗng không thể tiến hành thanh toán!")
+        } else {
+            this.setState({
+                isShowLoading: true
+            })
+            let { arrReceiver } = this.state
+            if (arrReceiver && arrReceiver.length > 0) {
+                let { userInfo } = this.props
+                if (userInfo.ActiveEmail === 1) {
+                    this.props.history.push(`/order/${userInfo.id}`);
+                } else {
+                    let res = await handleSendVerifyEmail({ id: userInfo.id })
+                    this.setState({
+                        isShowLoading: false
+                    })
+                    if (res && res.errCode === 0) {
+                        toast.error("Vui lòng kiểm tra email để xác thực email trước khi đặt hàng!")
+                    } else {
+                        toast.error("Đã có lỗi xảy ra, vui lòng thử lại sau!")
+                    }
+                }
+            } else {
                 this.setState({
                     isShowLoading: false
                 })
-                if (res && res.errCode === 0) {
-                    toast.error("Vui lòng kiểm tra email để xác thực email trước khi đặt hàng!")
-                } else {
-                    toast.error("Đã có lỗi xảy ra, vui lòng thử lại sau!")
-                }
+                this.toggleReceiverModal()
             }
-        } else {
-            this.setState({
-                isShowLoading: false
-            })
-            this.toggleReceiverModal()
         }
     }
     toggleReceiverModal = () => {
@@ -297,15 +314,22 @@ class Cart extends Component {
                                     })}
                             </tbody>
                         </table>
-                        <div className='payment-cart'>
-                            <div className='sum-cart'>
-                                <FormattedMessage id={"cart.sum-price"} /> ({dataItemOfCart && !_.isEmpty(dataItemOfCart) && dataItemOfCart.ProductUserCartData ? dataItemOfCart.ProductUserCartData.length : 0} <FormattedMessage id={"cart.product"} />): {sumCart ? sumCart.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }) : 0}
+                        {dataItemOfCart && !_.isEmpty(dataItemOfCart) &&
+                            <div className='payment-cart'>
+                                <div className='sum-cart'>
+                                    <FormattedMessage id={"cart.sum-price"} /> ( {dataItemOfCart.ProductUserCartData ? dataItemOfCart.ProductUserCartData.length : 0} <FormattedMessage id={"cart.product"} />): {sumCart ? sumCart.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }) : 0}
+                                </div>
+                                <div className='no-ship-cart my-2'><FormattedMessage id={"cart.no-price-ship"} /></div>
+                                <div className='action-cart'>
+                                    <div className='delete-cart' onClick={() => this.handleDeleteCart(dataItemOfCart.id)}>
+                                        <FormattedMessage id={"cart.delete-cart"} />
+                                    </div>
+                                    <div className='go-payment' onClick={() => this.handleOrder(dataItemOfCart.ProductUserCartData)}>
+                                        <FormattedMessage id={"cart.payment"} />
+                                    </div>
+                                </div>
                             </div>
-                            <div className='no-ship-cart my-2'><FormattedMessage id={"cart.no-price-ship"} /></div>
-                            <div className='go-payment' onClick={() => this.handleOrder()}>
-                                <FormattedMessage id={"cart.payment"} />
-                            </div>
-                        </div>
+                        }
                     </div>
                     <HomeFooter />
                 </LoadingOverlay>

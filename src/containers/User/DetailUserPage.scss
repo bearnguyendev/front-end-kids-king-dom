@@ -254,7 +254,7 @@
                     justify-content: space-between;
                     
                     .content-right-order{
-                        color: #45c3d2;
+                        color: #0e60b2;
                     }
                     .content-left-order{
                         display: flex;
@@ -362,10 +362,12 @@
                         padding: 8px 46px;
                         border-radius: 3px;
                         cursor: pointer;
-           
                         &:hover{
                             opacity: 0.8;
                         }
+                    }
+                    .btn-cancel{
+                        background-color: #ed2f3f !important;
                     }
                     .btn-view{
                         border: 1px solid #00000017;

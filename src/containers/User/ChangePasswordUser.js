@@ -38,6 +38,7 @@ class ChangePasswordUser extends Component {
         })
     }
     componentDidMount() {
+        this.props.showAvatar()
         window.scrollTo(0, 0)
     }
     componentDidUpdate(prevProps, prevState, snapshot) {

@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { createNewProduct, editProductService } from '../../../services/userService';
 import * as actions from "../../../store/actions";
 import { CommonUtils, CRUD_ACTIONS } from '../../../utils';
+import { emitter } from "../../../utils/emitter"
 import MarkdownIt from 'markdown-it';
 import MdEditor from 'react-markdown-editor-lite';
 import 'react-markdown-editor-lite/lib/index.css';
@@ -26,6 +27,8 @@ class ManageProduct extends Component {
             arrBrands: '',
             warrantyId: '',
             arrWarranties: '',
+            arrAges: '',
+            dataAgesItem: '',
             shortDes: '',
             nameDetail: '',
             width: '',
@@ -50,6 +53,7 @@ class ManageProduct extends Component {
         this.props.fetchAllcodeCategory()
         this.props.fetchAllcodeBrands()
         this.props.fetchAllcodeWarranties()
+        this.props.fetchAllcodeAgeUseProduct()
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
         window.scrollTo(0, 0);
@@ -87,18 +91,18 @@ class ManageProduct extends Component {
                 warrantyId: warrantyArr && warrantyArr.length > 0 ? warrantyArr[0].keyMap : ''
             })
         }
-        // if (prevProps.listSizes !== this.props.listSizes) {
-        //     let sizeArr = this.props.listSizes
-        //     this.setState({
-        //         arrSizes: sizeArr,
-        //         sizeId: sizeArr && sizeArr.length > 0 ? sizeArr[0].keyMap : ''
-        //     })
-        // }
+        if (prevProps.listAges !== this.props.listAges) {
+            let ageArr = this.props.listAges
+            this.setState({
+                arrAges: ageArr,
+            })
+        }
         if (prevProps.listProducts !== this.props.listProducts) {
-            //let sizeArr = this.props.listSizes
             let warrantyArr = this.props.listWarranties
             let brandArr = this.props.listBrands
             let categoryArr = this.props.listCategory
+            let arrAges = this.props.listAges
+            arrAges.map(item => item.status = '')
             this.setState({
                 name: '',
                 origin: '',
@@ -110,6 +114,7 @@ class ManageProduct extends Component {
                 height: '',
                 weight: '',
                 stock: '',
+                arrAges,
                 originalPrice: '',
                 percentDiscount: '',
                 discountPrice: '',
@@ -117,6 +122,7 @@ class ManageProduct extends Component {
                 previewImgURL: '',
                 desMarkdown: '',
                 desHTML: '',
+                dataAgesItem: '',
                 categoryId: categoryArr && categoryArr.length > 0 ? categoryArr[0].keyMap : '',
                 brandId: brandArr && brandArr.length > 0 ? brandArr[0].keyMap : '',
                 warrantyId: warrantyArr && warrantyArr.length > 0 ? warrantyArr[0].keyMap : '',
@@ -172,15 +178,69 @@ class ManageProduct extends Component {
             isOpen: true
         })
     }
+    handleOnClickAge = (age) => {
+        let { arrAges } = this.state;
+        if (arrAges && arrAges.length > 0) {
+            arrAges = arrAges.map(item => {
+                if (item.id === age.id) item.status = !item.status;
+                return item;
+            })
+            this.setState({
+                arrAges
+            })
+        }
+    }
+    buildDataAgeCreate = (ageItem) => {
+        try {
+            let copyArrAges = [...ageItem]
+            let result = []
+            if (copyArrAges && copyArrAges.length > 0) {
+                copyArrAges.map(item => {
+                    let object = {};
+                    if (item.status === true) {
+                        object.ageId = item.keyMap;
+                        object.status = 1
+                        result.push(object)
+                    }
+                })
+            }
+            return result
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    buildDataAgeUpdate = (ageItem) => {
+        try {
+            let { arrAges, id } = this.state
+            let copyArrAges = arrAges
+            let result = []
+            if (copyArrAges && copyArrAges.length > 0) {
+                copyArrAges.map(item => {
+                    let object = {};
+                    object.productId = id ? id : '';
+                    object.ageId = item.keyMap;
+                    if (item.status === true) object.status = 1
+                    else if (item.status === false) object.status = 0
+                    ageItem && ageItem.length > 0 && ageItem.map(ageUseItem => { if (ageUseItem.ageId === item.keyMap) object.id = ageUseItem.id })
+                    result.push(object)
+                })
+            }
+            return result
+        } catch (error) {
+            console.log(error);
+        }
+    }
     handleSaveProduct = async () => {
         try {
             let isValid = this.checkValidateInput()
             if (isValid === false) {
                 return;
             }
-            let { action } = this.state
+            let { action, dataAgesItem, arrAges } = this.state
             if (action === CRUD_ACTIONS.CREATE) {
-                let res = await createNewProduct(this.state)
+                let arrAgeUseProduct = this.buildDataAgeCreate(arrAges)
+                let state = { ...this.state, arrAgeUseProduct }
+                let res = await createNewProduct(state)
                 if (res && res.errCode === 0) {
                     toast.success(res.errMessage)
                     this.props.fetchProductRedux({
@@ -194,7 +254,10 @@ class ManageProduct extends Component {
                 }
             }
             if (action === CRUD_ACTIONS.EDIT) {
-                let res = await editProductService(this.state)
+                console.log("check dataAgesItem EDIT: ", dataAgesItem);
+                let arrAgeUseProduct = this.buildDataAgeUpdate(dataAgesItem)
+                let state = { ...this.state, arrAgeUseProduct }
+                let res = await editProductService(state)
                 if (res && res.errCode === 0) {
                     toast.success(res.errMessage)
                     this.props.fetchProductRedux({
@@ -203,6 +266,7 @@ class ManageProduct extends Component {
                         brandId: "ALL",
                         valueSearch: "ALL"
                     })
+                    emitter.emit('EVENT_CLEAR_MODAL_DATA')
                 } else {
                     toast.error(res.errMessage)
                 }
@@ -218,7 +282,19 @@ class ManageProduct extends Component {
         }
 
     }
-    handleEditProductFromParent = (product) => {
+    handleEditProductFromParent = async (product) => {
+        let arrAgesCopy = [...this.state.arrAges]
+        arrAgesCopy && arrAgesCopy.length > 0 && arrAgesCopy.map(item => item.status = false)
+        await this.setState({
+            arrAges: arrAgesCopy
+        })
+        for (const iterator of product.productAgeData) {
+            arrAgesCopy && arrAgesCopy.length > 0 &&
+                arrAgesCopy.map(item => {
+                    if (item.keyMap === iterator.ageId) iterator.status === 1 ? item.status = true : item.status = false
+                    return item
+                })
+        }
         this.setState({
             name: product.name,
             origin: product.origin,
@@ -233,6 +309,7 @@ class ManageProduct extends Component {
             height: product.height,
             weight: product.weight,
             stock: product.stock,
+            dataAgesItem: product.productAgeData,
             originalPrice: product.originalPrice,
             percentDiscount: product.percentDiscount,
             discountPrice: product.discountPrice,
@@ -243,6 +320,7 @@ class ManageProduct extends Component {
             previewImgURL: product.productImageData[0].image,
             action: CRUD_ACTIONS.EDIT,
             id: product.id,
+            arrAges: arrAgesCopy
         })
         this.clickBtnMove("add-edit")
     }
@@ -250,9 +328,8 @@ class ManageProduct extends Component {
         document.getElementById(id).scrollIntoView();
     }
     render() {
-
-
-        let { name, origin, material, categoryId, arrCategory, brandId, arrBrands, warrantyId, arrWarranties, shortDes, nameDetail, long, width, height, weight, stock, originalPrice, percentDiscount, discountPrice, previewImgURL, isOpen, id } = this.state
+        let { name, origin, material, categoryId, arrCategory, brandId, arrBrands, warrantyId, arrWarranties, shortDes, nameDetail, long, width, height, weight, stock, originalPrice, percentDiscount, discountPrice, previewImgURL, isOpen, id, arrAges } = this.state
+        console.log("check data: ", this.state);
         return (
             <div className='manage-product-container'>
 
@@ -423,6 +500,25 @@ class ManageProduct extends Component {
                                 />
                             </div>
                             <div className='col-12 my-3' style={{ fontWeight: '600' }}>
+                                <FormattedMessage id={"manage-product.age-use-product"} />
+                            </div>
+                            <div className='container'>
+                                <div className='row px-3'>
+                                    {arrAges && arrAges.length > 0 && arrAges.map((item, index) => {
+                                        return (
+                                            <div className="form-check col">
+                                                <input className="form-check-input" type="checkbox" id={item.id} value={item.keyMap}
+                                                    style={{ cursor: "pointer" }}
+                                                    onClick={() => this.handleOnClickAge(item)}
+                                                    checked={item.status === true ? true : false}
+                                                />
+                                                <label className="form-check-label" htmlFor={item.id} value={item.keyMap}>{item.value}</label>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            </div>
+                            <div className='col-12 my-3' style={{ fontWeight: '600' }}>
                                 <FormattedMessage id={"manage-product.detail-info"} />
                             </div>
                             <div className='col-3'>
@@ -460,7 +556,7 @@ class ManageProduct extends Component {
                                 <label><FormattedMessage id={"manage-product.discountPrice"} /></label>
                                 <div className="input-group ">
                                     <input type="text" className="form-control"
-                                        value={discountPrice}
+                                        value={discountPrice.toLocaleString('it-IT')}
                                         onChange={(event) => this.onChangeInput(event, 'discountPrice')}
                                         disabled={true} />
                                     <div className="input-group-append">
@@ -529,7 +625,7 @@ const mapStateToProps = state => {
         listCategory: state.admin.category,
         listBrands: state.admin.brands,
         listWarranties: state.admin.warranties,
-        //listSizes: state.admin.sizes,
+        listAges: state.admin.ageUseProducts,
         listProducts: state.admin.products,
     };
 };
@@ -539,7 +635,7 @@ const mapDispatchToProps = dispatch => {
         fetchAllcodeCategory: () => dispatch(actions.fetchAllcodeCategory()),
         fetchAllcodeBrands: () => dispatch(actions.fetchAllcodeBrands()),
         fetchAllcodeWarranties: () => dispatch(actions.fetchAllcodeWarranties()),
-        //fetchAllcodeSizes: () => dispatch(actions.fetchAllcodeSizes()),
+        fetchAllcodeAgeUseProduct: () => dispatch(actions.fetchAllcodeAgeUseProduct()),
         fetchProductRedux: (data) => dispatch(actions.fetchAllProducts(data)),
     };
 };

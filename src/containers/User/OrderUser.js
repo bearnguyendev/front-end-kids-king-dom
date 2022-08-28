@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { updateStatusOrderService } from '../../services/userService';
 import * as actions from "../../store/actions";
@@ -18,6 +18,7 @@ class OrderUser extends Component {
         }
     }
     async componentDidMount() {
+        this.props.hideAvatar()
         window.scrollTo(0, 0)
         let { userId } = this.props;
         if (userId) {
@@ -56,11 +57,12 @@ class OrderUser extends Component {
             console.log(error);
         }
     }
-    handleReceivedOrder = async (orderId) => {
+    handleReceivedOrder = async (data) => {
         try {
             let res = await updateStatusOrderService({
-                id: orderId,
-                statusId: 'S7'
+                id: data.id,
+                statusId: 'S7',
+                dataOrderUser: data
             })
             if (res && res.errCode === 0) {
                 toast.success("Đã nhận đơn hàng")
@@ -102,7 +104,7 @@ class OrderUser extends Component {
     }
     render() {
         let { dataOrder, price, dataChange, arrStatusOrder } = this.state
-        console.log("check state Order: ", this.state);
+
         return (
             <div className="order-user">
                 {/* <select onChange={(event) => this.handleOnchangeStatus(event)} className="form-control col-6 ml-3 mt-3 form-control-lg">
@@ -155,9 +157,10 @@ class OrderUser extends Component {
                                                 <div className='box-list-order'>
                                                     <div className='content-top-order'>
                                                         <div className='content-left-order'>
-                                                            <span className='label-name-shop'><i className="fas fa-store"></i><FormattedMessage id={"user.name-shop"} /></span>
+                                                            <span className='label-name-shop'><i className="fas fa-store"></i>{' '}<FormattedMessage id={"user.name-shop"} /></span>
+                                                            <Link to={`/user/detail-order/${item1.id}`}><FormattedMessage id={"user.detail-order"} /></Link>
                                                         </div>
-                                                        <div className='content-right-order'>
+                                                        <div className={item1.statusOrderData && item1.statusOrderData.keyMap === "S8" ? "text-danger" : 'content-right-order'} >
                                                             {item1.statusOrderData && item1.statusOrderData.value}
                                                         </div>
                                                     </div>
@@ -191,13 +194,13 @@ class OrderUser extends Component {
                                                     <div className='down'>
                                                         {((item1.statusId === 'S3') || (item1.statusId === 'S4')) &&
 
-                                                            <div className='btn-buy' onClick={() => this.handleCancelOrder(item1)}>
+                                                            <div className='btn-buy btn-cancel' onClick={() => this.handleCancelOrder(item1)}>
                                                                 <FormattedMessage id={"user.cancel-order"} />
                                                             </div>
                                                         }
                                                         {
                                                             item1.statusId === 'S6' &&
-                                                            <div className='btn-buy' onClick={() => this.handleReceivedOrder(item1.id)} >
+                                                            <div className='btn-buy' onClick={() => this.handleReceivedOrder(item1)} >
                                                                 <FormattedMessage id={"user.received"} />
                                                             </div>
                                                         }

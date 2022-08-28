@@ -31,18 +31,38 @@
             font-style: italic;
             font-size: 14px;
         }
-        .go-payment{
-            border: 1px solid #56ccff;
-            font-size: 20px;
-            padding: 1%;
-            margin-top: 3px;
-            border-radius: 3px;
-            cursor: pointer;
-            &:hover{
-                box-shadow: 0 0 3px 0;
-                background-color: #56ccff;
-                color: #eee;
+        .action-cart{
+            width: 100%;
+            display: inline-flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            .delete-cart{
+                border: 1px solid #c92a2d;
+                font-size: 20px;
+                padding: 1%;
+                margin-top: 3px;
+                border-radius: 3px;
+                cursor: pointer;
+                &:hover{
+                    box-shadow: 0 0 3px 0;
+                    background-color: #c92a2d;
+                    color: #eee;
+                }
+            }
+            .go-payment{
+                border: 1px solid #56ccff;
+                font-size: 20px;
+                padding: 1%;
+                margin-top: 3px;
+                border-radius: 3px;
+                cursor: pointer;
+                &:hover{
+                    box-shadow: 0 0 3px 0;
+                    background-color: #56ccff;
+                    color: #eee;
+                }
             }
         }
+       
     }
 }

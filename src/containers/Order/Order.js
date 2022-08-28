@@ -133,38 +133,42 @@ class Order extends Component {
     }
     handleOrder = async (totalPriceDiscount) => {
         let { selectedTypeShip, dataItemOfCart, receiverId, selectedVoucher, note } = this.state
-        if (!selectedTypeShip) {
-            toast.error("Chưa chọn đơn vị vận chuyển")
+        if (dataItemOfCart.ProductUserCartData.length <= 0) {
+            toast.error("Không có sản phẩm. Không thể tiến hành đặt hàng!")
         } else {
-            let result = [];
-            dataItemOfCart.ProductUserCartData.map((item, index) => {
-                let object = {};
-                object.productId = item.Cart.productId
-                object.quantity = item.Cart.quantity
-                object.realPrice = item.discountPrice
-                result.push(object)
-            })
-            let userId = this.props.userInfo.id
-            if (userId) {
-                let res = await createNewOrderService({
-                    orderDate: Date.now(),
-                    receiverId: receiverId,
-                    typeShipId: selectedTypeShip.id,
-                    voucherId: selectedVoucher.id,
-                    note: note,
-                    //totalPayment: totalPriceDiscount > 0 ? totalPriceDiscount + selectedTypeShip.price : selectedTypeShip.price,
-                    totalPayment: totalPriceDiscount,
-                    userId: userId,
-                    arrDataCart: result
+            if (!selectedTypeShip) {
+                toast.error("Chưa chọn đơn vị vận chuyển!")
+            } else {
+                let result = [];
+                dataItemOfCart.ProductUserCartData.map((item, index) => {
+                    let object = {};
+                    object.productId = item.Cart.productId
+                    object.quantity = item.Cart.quantity
+                    object.realPrice = item.discountPrice
+                    result.push(object)
                 })
-                if (res && res.errCode === 0) {
-                    toast.success(res.errMessage)
-                    await this.props.fetchAllCartByUserId(userId)
-                    setTimeout(() => {
-                        this.props.history.push(`/user/order/${userId}`)
-                    }, 3000)
-                } else {
-                    toast.error(res.errMessage)
+                let userId = this.props.userInfo.id
+                if (userId) {
+                    let res = await createNewOrderService({
+                        orderDate: Date.now(),
+                        receiverId: receiverId,
+                        typeShipId: selectedTypeShip.id,
+                        voucherId: selectedVoucher.id,
+                        note: note,
+                        //totalPayment: totalPriceDiscount > 0 ? totalPriceDiscount + selectedTypeShip.price : selectedTypeShip.price,
+                        totalPayment: totalPriceDiscount,
+                        userId: userId,
+                        arrDataCart: result
+                    })
+                    if (res && res.errCode === 0) {
+                        toast.success(res.errMessage)
+                        await this.props.fetchAllCartByUserId(userId)
+                        setTimeout(() => {
+                            this.props.history.push(`/user/order/${userId}`)
+                        }, 3000)
+                    } else {
+                        toast.error(res.errMessage)
+                    }
                 }
             }
         }

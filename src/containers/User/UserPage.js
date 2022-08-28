@@ -14,7 +14,7 @@ class UserPage extends Component {
         }
     }
     componentDidMount() {
-
+        this.props.showAvatar()
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
     }

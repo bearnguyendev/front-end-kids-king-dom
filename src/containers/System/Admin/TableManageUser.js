@@ -8,6 +8,7 @@ import MarkdownIt from 'markdown-it';
 
 import moment from 'moment';
 import { toast } from 'react-toastify';
+import { CommonUtils } from '../../../utils';
 // import style manually
 
 // Register plugins if required
@@ -29,7 +30,8 @@ class TableManageUser extends Component {
         super(props);
         this.state = {
             userRedux: [],
-            errMessage: ""
+            errMessage: "",
+            dataExport: []
         }
     }
 
@@ -39,7 +41,8 @@ class TableManageUser extends Component {
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevProps.listUsers !== this.props.listUsers) {
             this.setState({
-                userRedux: this.props.listUsers
+                userRedux: this.props.listUsers,
+                dataExport: this.buildDataExport(this.props.listUsers)
             })
         }
     }
@@ -74,12 +77,41 @@ class TableManageUser extends Component {
             toast.error("Thao tác thất bại! Vui lòng thử lại sau.")
         }
     }
+    buildDataExport = (data) => {
+        let result = data && data.length > 0 && data.map(item => ({
+            Id: item.id,
+            Email: item.email,
+            Address: item.address,
+            Birthday: moment.unix(item.birthday / 1000).format('DD/MM/YYYY'),
+            Name: `${item.lastName} ${item.firstName}`,
+            PhoneNumber: item.phoneNumber,
+            Gender: item.genderData.value,
+            Role: item.roleData.value,
+            Status: item.statusId === 'S1' ? "Đang hoạt động" : "Vô hiệu hoá"
+        }))
+        return result
+    }
+    handleExportExcel = async () => {
+        let { dataExport } = this.state
+        let nameFile = `ListUser-${new Date().getTime()}`
+        await CommonUtils.exportExcel(dataExport, "Danh sách người dùng", nameFile)
+    }
     render() {
         let arrUsers = this.state.userRedux
         const { userInfo } = this.props
         console.log("check props: ", this.props);
         return (
             <>
+                <div>
+                    <button className='btn btn-success btn-lg mb-3'
+                        style={{ float: "right", width: "11rem", height: "3rem" }}
+                        onClick={() => this.handleExportExcel()}
+                    >
+                        Xuất
+                        &nbsp;
+                        <i style={{ fontSize: "18px" }} className="fas fa-file-excel"></i>
+                    </button>
+                </div>
                 <table id='TableManageUser'>
                     <thead>
                         <tr>
@@ -95,7 +127,7 @@ class TableManageUser extends Component {
                     </thead>
                     <tbody>
                         {arrUsers && arrUsers.length > 0 &&
-                            arrUsers.filter(user => user.id !== userInfo.id).map((item, index) => {
+                            arrUsers.map((item, index) => {
                                 let date = moment.unix(item.birthday / 1000).format('DD/MM/YYYY')
                                 return (
                                     <tr key={index}>
@@ -108,6 +140,7 @@ class TableManageUser extends Component {
                                         <td>{item.statusId === 'S1' ? "Đang hoạt động" : "Vô hiệu hoá"} </td>
                                         <td>
                                             <div className='btn-manage'
+                                                style={item.id === userInfo.id ? { visibility: "hidden", pointerEvents: "none" } : { visibility: "visible" }}
                                             >
                                                 <button
                                                     className='btn-edit'

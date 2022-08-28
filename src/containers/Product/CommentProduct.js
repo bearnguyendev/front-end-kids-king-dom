@@ -256,7 +256,7 @@ class CommentProduct extends Component {
                                             <div key={index} className="review_item">
                                                 <div className="media">
                                                     <div className="d-flex">
-                                                        <img className="img-avatar" src={item.userCommentData.image} alt="" />
+                                                        <img className="img-avatar" src={item.userCommentData.image ? item.userCommentData.image : 'https://www.seekpng.com/png/detail/428-4287240_no-avatar-user-circle-icon-png.png'} alt="" />
                                                     </div>
                                                     <div className="media-body">
                                                         <h4>{name}</h4>
@@ -270,7 +270,7 @@ class CommentProduct extends Component {
                                                                     })
                                                                 }
                                                             </div>
-                                                            {userInfo && userInfo.roleId === "R1" &&
+                                                            {userInfo && userInfo.roleId === "R1" && item.childComment.length <= 0 &&
                                                                 <button onClick={() => this.handleOpenModal(item.id)} className="reply_btn" >Phản hồi</button>
                                                             }
                                                         </div>

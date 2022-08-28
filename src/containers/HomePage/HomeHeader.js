@@ -28,7 +28,9 @@ class HomeHeader extends Component {
                         <div className='options'>
                             <div className='option-child'>
                                 <div className="icon-child">
-                                    <i className="fas fa-truck-moving"></i>
+                                    <div className='icon'>
+                                        <i className="fas fa-truck-moving"></i>
+                                    </div>
                                 </div>
                                 <div className='text-child'>
                                     Giao hàng toàn quốc
@@ -36,7 +38,9 @@ class HomeHeader extends Component {
                             </div>
                             <div className='option-child'>
                                 <div className="icon-child">
-                                    <i className="fas fa-undo-alt"></i>
+                                    <div className='icon'>
+                                        <i className="fas fa-undo-alt"></i>
+                                    </div>
                                 </div>
                                 <div className='text-child'>
                                     Trả hàng trong 14 ngày
@@ -44,7 +48,9 @@ class HomeHeader extends Component {
                             </div>
                             <div className='option-child'>
                                 <div className="icon-child">
-                                    <i className="fas fa-phone"></i>
+                                    <div className='icon'>
+                                        <i className="fas fa-phone"></i>
+                                    </div>
                                 </div>
                                 <div className='text-child'>
                                     Luôn luôn sẵn sàng hỗ trợ

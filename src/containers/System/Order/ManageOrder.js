@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import * as actions from "../../../store/actions";
 import ListOrder from './ListOrder';
 import { CommonUtils } from '../../../utils';
+import moment from 'moment';
 class ManageOrder extends Component {
 
     constructor(props) {
@@ -11,6 +12,7 @@ class ManageOrder extends Component {
         this.state = {
             arrStatusOrder: [],
             dataOrder: [],
+            dataExport: []
         }
     }
     componentDidMount() {
@@ -24,16 +26,33 @@ class ManageOrder extends Component {
             })
         }
         if (prevProps.orderRedux !== this.props.orderRedux) {
+            let result = this.buildDataExport(this.props.orderRedux)
             this.setState({
-                dataOrder: this.props.orderRedux
+                dataOrder: this.props.orderRedux,
+                dataExport: result
             })
         }
     }
     handleOnchangeStatus = (event) => {
         this.props.fetchAllOrders(event.target.value)
     }
+    buildDataExport = (data) => {
+        let result = data && data.length > 0 && data.map(item => ({
+            Id: item.id,
+            OrderDate: moment.unix(item.orderDate / 1000).format('DD/MM/YYYY'),
+            OrderDateSuccess: item.orderDateSuccess ? moment.unix(item.orderDateSuccess / 1000).format('DD/MM/YYYY') : 'Đơn hàng chưa có ngày hoàn thành',
+            TypeShip: item.typeShipData.type,
+            Voucher: item.voucherData ? item.voucherData.codeVoucher : "Không sử dụng mã giảm giá",
+            OrderAddress: item.receiverOrderData.address,
+            Status: item.statusOrderData.value,
+            TotalPayment: item.totalPayment > 0 ? (item.totalPayment + item.typeShipData.price).toLocaleString('it-IT', { style: 'currency', currency: 'VND' }) : item.typeShipData.price.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })
+        }))
+        return result
+    }
     handleExportExcel = async () => {
-        await CommonUtils.exportExcel(this.state.dataOrder, "Danh sách đặt hàng", "ListOrder")
+        let { dataExport } = this.state
+        let nameFile = `ListOrder-${new Date().getTime()}`
+        await CommonUtils.exportExcel(dataExport, "Danh sách đặt hàng", nameFile)
     }
     render() {
         let { arrStatusOrder } = this.state
@@ -45,7 +64,7 @@ class ManageOrder extends Component {
                 <div className='manage-order-body'>
                     <div className='container'>
                         <div className="card mb-4">
-                            <div className="card-header">
+                            <div className="card-header font-weight-bold">
                                 <i className="fas fa-table me-1" />
                                 <FormattedMessage id={"manage-order.list-order"} />
                             </div>
@@ -61,7 +80,7 @@ class ManageOrder extends Component {
                                         })
                                     }
                                 </select>
-                                {/* <div className='col-3' >
+                                <div className='col-3' >
                                     <button className='btn btn-success btn-lg'
                                         style={{ float: "right", width: "11rem", height: "3rem" }}
                                         onClick={() => this.handleExportExcel()}
@@ -70,7 +89,7 @@ class ManageOrder extends Component {
                                         &nbsp;
                                         <i style={{ fontSize: "18px" }} className="fas fa-file-excel"></i>
                                     </button>
-                                </div> */}
+                                </div>
                             </div>
                             <ListOrder
                                 arrOrder={this.state.dataOrder}

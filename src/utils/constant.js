@@ -9,6 +9,11 @@ export const path = {
     LOG_OUT: '/logout',
     CHANGE_PASSWORD: '/change-password/:id',
     WELCOME_SYSTEM: '/admin',
+    MANAGE_USER: '/admin/manage-user',
+    MANAGE_CATEGORY: '/admin/manage-category',
+    MANAGE_BRAND: '/admin/manage-brand',
+    MANAGE_PRODUCT: '/admin/manage-product',
+    MANAGE_STATISTICAL: '/admin/statistical',
     UPLOAD_IMG_PRODUCT: '/admin/product/image/:id',
     MANAGE_BANNER: "/admin/manage-banner",
     MANAGE_SUBJECT: "/admin/manage-subject",
@@ -31,7 +36,8 @@ export const path = {
     VOUCHER_USER: "/user/voucher/:id",
     ADDRESS_USER: "/user/address/:id",
     ORDER_USER: "/user/order/:id",
-    CHANGE_PASSWORD_USER: '/user/change-password/:id'
+    DETAIL_ORDER_USER: "/user/detail-order/:id",
+    CHANGE_PASSWORD_USER: '/user/change-password/:id',
 
 };
 

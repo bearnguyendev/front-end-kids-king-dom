@@ -59,7 +59,7 @@ class ItemProduct extends Component {
                                 <div>{dataProduct.name}</div>
                             </div>
                             <div className='top-product-price'>
-                                <span className='top-product-discount-price'>{(dataProduct.discountPrice / 1000).toLocaleString('it-IT') + "     NGAN"} </span>
+                                <span className='top-product-discount-price'>{dataProduct.discountPrice.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })} </span>
                                 &#8592;
                                 <span className='top-product-original-price'>{dataProduct.originalPrice.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })} </span>
                             </div>

@@ -17,6 +17,7 @@ import ManageTypeVoucher from '../containers/System/TypeVoucher/ManageTypeVouche
 import ManageVoucher from '../containers/System/Voucher/ManageVoucher';
 import ManageOrder from '../containers/System/Order/ManageOrder';
 import DetailOrder from '../containers/System/Order/DetailOrder';
+import ManageStatistical from '../containers/System/Statistical/ManageStatistical';
 class System extends Component {
     render() {
         const { systemMenuPath, isAdmin } = this.props;
@@ -27,10 +28,10 @@ class System extends Component {
                     <div className="system-list" style={{ minHeight: "calc(100vh - 100px)" }}>
                         <Switch>
                             <Route path={path.WELCOME_SYSTEM} exact component={Welcome} />
-                            <Route path="/admin/manage-user" component={ManageUser} />
-                            <Route path="/admin/manage-category" component={ManageCategory} />
-                            <Route path="/admin/manage-brand" component={ManageBrand} />
-                            <Route path="/admin/manage-product" exact component={ManageProduct} />
+                            <Route path={path.MANAGE_USER} component={ManageUser} />
+                            <Route path={path.MANAGE_CATEGORY} component={ManageCategory} />
+                            <Route path={path.MANAGE_BRAND} component={ManageBrand} />
+                            <Route path={path.MANAGE_PRODUCT} exact component={ManageProduct} />
                             <Route path={path.UPLOAD_IMG_PRODUCT} exact component={ProductImage} />
                             <Route path={path.MANAGE_BANNER} exact component={ManageBanner} />
                             <Route path={path.MANAGE_SUBJECT} exact component={ManageSubject} />
@@ -40,6 +41,7 @@ class System extends Component {
                             <Route path={path.MANAGE_VOUCHER} exact component={ManageVoucher} />
                             <Route path={path.MANAGE_ORDER} exact component={ManageOrder} />
                             <Route path={path.DETAIL_ORDER} exact component={DetailOrder} />
+                            <Route path={path.MANAGE_STATISTICAL} exact component={ManageStatistical} />
                             <Route component={() => { return (<Redirect to={systemMenuPath} />) }} />
                         </Switch>
                     </div>
@@ -47,7 +49,6 @@ class System extends Component {
                         <p>Bản quyền &copy; 2022 thuộc về Kidskingdom</p>
                     </div>
                 </div>
-
             </>
         );
     }

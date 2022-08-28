@@ -31,6 +31,7 @@ class DetailUserPage extends Component {
         }
     }
     async componentDidMount() {
+        this.props.showAvatar()
         this.props.fetchAllcodeGenders();
         let user = this.props.userInfo
         this.setState({
@@ -120,6 +121,7 @@ class DetailUserPage extends Component {
             phoneNumber: this.state.phoneNumber,
             genderId: this.state.genderId,
             roleId: roleId,
+            ActiveEmail: this.props.userInfo.ActiveEmail,
             image: image ? image : oldImage,
         }
         this.props.editAUserRedux(data)
@@ -149,6 +151,7 @@ class DetailUserPage extends Component {
         let genders = this.state.genderArr;
         let { email, firstName, lastName,
             phoneNumber, address, genderId } = this.state
+        console.log("check ", this.props);
         return (
             <div className='content-detail '>
                 <div className='title-content'>

@@ -162,26 +162,26 @@ export const fetchAllcodeDiscounts = () => {
         }
     }
 }
-export const fetchAllcodeSizes = () => {
+export const fetchAllcodeAgeUseProduct = () => {
     return async (dispatch, getState) => {
         try {
-            dispatch({ type: actionTypes.FETCH_ALLCODE_SIZE_START })
-            let res = await getAllCodeService("SIZE");
+            dispatch({ type: actionTypes.FETCH_ALLCODE_AGE_USE_PRODUCT_START })
+            let res = await getAllCodeService("AGE-USE-PRODUCT");
             if (res && res.errCode === 0) {
                 dispatch({
-                    type: actionTypes.FETCH_ALLCODE_SIZE_SUCCESS,
-                    dataSize: res.data,
+                    type: actionTypes.FETCH_ALLCODE_AGE_USE_PRODUCT_SUCCESS,
+                    dataAgeUseProduct: res.data,
                 })
             } else {
                 dispatch({
-                    type: actionTypes.FETCH_ALLCODE_SIZE_FAILED
+                    type: actionTypes.FETCH_ALLCODE_AGE_USE_PRODUCT_FAILED
                 })
             }
         } catch (error) {
             dispatch({
-                type: actionTypes.FETCH_ALLCODE_SIZE_FAILED
+                type: actionTypes.FETCH_ALLCODE_AGE_USE_PRODUCT_FAILED
             })
-            console.log("FETCH_ALLCODE_SIZE_FAILED: ", error);
+            console.log("FETCH_ALLCODE_AGE_USE_PRODUCT_FAILED: ", error);
         }
     }
 }
@@ -407,11 +407,11 @@ export const fetchNewProducts = (limit) => {
         }
     }
 }
-export const deleteAProduct = (productId) => {
+export const deleteAProduct = (data) => {
     return async (dispatch, getState) => {
         try {
             dispatch({ type: actionTypes.DELETE_PRODUCT_START })
-            let res = await deleteProductService(productId);
+            let res = await deleteProductService(data);
             if (res && res.errCode === 0) {
                 dispatch(deleteProductSuccess())
                 toast.success(res.errMessage)

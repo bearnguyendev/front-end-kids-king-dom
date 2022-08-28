@@ -25,16 +25,18 @@ class Blog extends Component {
     handleViewDetailBlog = (id) => {
         this.props.history.push(`/detail-blog/${id}`)
     }
+    handleViewAllBlogs = () => {
+        this.props.history.push(`/blog`)
+    }
     render() {
         let { arrBlogs } = this.state
-        arrBlogs = arrBlogs.concat(arrBlogs).concat(arrBlogs)
         return (
             <div className='section-share section-blog'>
                 <div className='section-container'>
                     <div className='section-header'>
                         <span className='title-section'><FormattedMessage id={"home-page.blog"} />
                         </span>
-                        <button className='btn-section'><FormattedMessage id={"home-page.more-infor"} /></button>
+                        <button className='btn-section' onClick={() => this.handleViewAllBlogs()}><FormattedMessage id={"home-page.more-infor"} /></button>
                     </div>
                     <div className='section-body'>
                         <Slider {...this.props.settings}>

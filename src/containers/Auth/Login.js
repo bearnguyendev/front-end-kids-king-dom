@@ -26,6 +26,7 @@ class Login extends Component {
             ...copyState
         })
     }
+
     handleLogin = async () => {
         this.setState({
             errMessage: ""
@@ -40,6 +41,7 @@ class Login extends Component {
                     errMessage: data.errMessage
                 })
             } else {
+                console.log("check data: ", data.user);
                 this.props.userLoginSuccess(data.user)
                 this.props.fetchAllCartByUserId(data.user.id)
             }

@@ -22,11 +22,14 @@ class DetailProduct extends Component {
             dataProduct: {},
             quantityProduct: 1,
             nav1: null,
-            nav2: null
+            nav2: null,
+            arrAges: [],
+            status: '',
         }
     }
     async componentDidMount() {
         window.scrollTo(0, 0)
+        this.props.fetchAllcodeAgeUseProduct()
         if (this.props.match && this.props.match.params && this.props.match.params.id) {
             let productId = this.props.match.params.id
             await this.props.fetchAllCommentByProductIdRedux(productId)
@@ -49,7 +52,27 @@ class DetailProduct extends Component {
         });
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
-
+        if (prevProps.listAges !== this.props.listAges) {
+            let { listAges } = this.props
+            this.setState({
+                arrAges: listAges,
+            })
+        }
+        if (prevState.dataProduct !== this.state.dataProduct) {
+            let { listAges } = this.props
+            this.buildDateAge(listAges, this.state.dataProduct)
+        }
+    }
+    buildDateAge = (listAges, dataProduct) => {
+        let productAgeData = dataProduct.productAgeData && dataProduct.productAgeData
+        if (listAges && listAges.length > 0 && productAgeData && productAgeData.length > 0) {
+            for (const iterator of listAges) {
+                productAgeData.map(item => { if (item.ageId === iterator.keyMap) iterator.status = item.status })
+            }
+        }
+        this.setState({
+            arrAges: listAges
+        })
     }
     openPreviewImage = (url) => {
         // if (!this.state.previewImgURL) {
@@ -84,8 +107,10 @@ class DetailProduct extends Component {
         })
     }
     render() {
-        let { dataProduct, quantityProduct, isOpen, previewImgURL } = this.state
+        let { dataProduct, quantityProduct, isOpen, previewImgURL, arrAges, status } = this.state
+        console.log("check dataProduct: ", dataProduct);
         let currentURL = +process.env.REACT_APP_IS_LOCALHOST === 1 ? "https://bearnguyen-restaurant-bot-tv.herokuapp.com/" : window.location.href;
+        arrAges = arrAges && arrAges.length > 0 && arrAges.filter(item => item.status === 1)
         return (
             <>
                 <HomeNav />
@@ -196,39 +221,53 @@ class DetailProduct extends Component {
                                         <tbody>
                                             <tr>
                                                 <th scope="row" className='col-4'>Chiều dài</th>
-                                                <td>{dataProduct.long ? dataProduct.long + " cm" : "Chưa có dữ liệu"}</td>
+                                                <td>{dataProduct.long ? dataProduct.long + " cm" : <FormattedMessage id={"detail-product.no-data"} />}</td>
                                             </tr>
                                             <tr>
                                                 <th scope="row">Chiều rộng</th>
-                                                <td>{dataProduct.width ? dataProduct.width + " cm" : "Chưa có dữ liệu"}</td>
+                                                <td>{dataProduct.width ? dataProduct.width + " cm" : <FormattedMessage id={"detail-product.no-data"} />}</td>
                                             </tr>
                                             <tr>
                                                 <th scope="row">Chiều cao</th>
-                                                <td>{dataProduct.height ? dataProduct.height + " cm" : "Chưa có dữ liệu"}</td>
+                                                <td>{dataProduct.height ? dataProduct.height + " cm" : <FormattedMessage id={"detail-product.no-data"} />}</td>
                                             </tr>
                                             <tr>
                                                 <th scope="row">Trọng lượng</th>
-                                                <td>{dataProduct.weight ? dataProduct.weight + " kg" : "Chưa có dữ liệu"}</td>
+                                                <td>{dataProduct.weight ? dataProduct.weight + " kg" : <FormattedMessage id={"detail-product.no-data"} />}</td>
                                             </tr>
                                             <tr>
                                                 <th scope="row">Xuất xứ</th>
-                                                <td>{dataProduct.origin ? dataProduct.origin : "Chưa có dữ liệu"}</td>
+                                                <td>{dataProduct.origin ? dataProduct.origin : <FormattedMessage id={"detail-product.no-data"} />}</td>
                                             </tr>
                                             <tr>
                                                 <th scope="row">Chất liệu</th>
-                                                <td>{dataProduct.material ? dataProduct.material : "Chưa có dữ liệu"}</td>
+                                                <td>{dataProduct.material ? dataProduct.material : <FormattedMessage id={"detail-product.no-data"} />}</td>
                                             </tr>
                                             <tr>
                                                 <th scope="row">Thương hiệu</th>
-                                                <td>{dataProduct.brandData ? dataProduct.brandData.value : "Chưa có dữ liệu"}</td>
+                                                <td>{dataProduct.brandData ? dataProduct.brandData.value : <FormattedMessage id={"detail-product.no-data"} />}</td>
                                             </tr>
                                             <tr>
                                                 <th scope="row">Danh mục</th>
-                                                <td>{dataProduct.categoryData ? dataProduct.categoryData.value : "Chưa có dữ liệu"}</td>
+                                                <td>{dataProduct.categoryData ? dataProduct.categoryData.value : <FormattedMessage id={"detail-product.no-data"} />}</td>
                                             </tr>
                                             <tr>
                                                 <th scope="row">Thời gian bảo hành</th>
-                                                <td>{dataProduct.warrantyData ? dataProduct.warrantyData.value : "Chưa có dữ liệu"}</td>
+                                                <td>{dataProduct.warrantyData ? dataProduct.warrantyData.value : <FormattedMessage id={"detail-product.no-data"} />}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Độ tuổi</th>
+                                                <td>
+                                                    {arrAges && arrAges.length > 0 ? arrAges.map((age, index) => {
+                                                        if (index !== arrAges.length - 1) {
+                                                            return <span key={index}>{age.value}{", "}</span>
+                                                        } else {
+                                                            return <span key={index}>{age.value}{"."}</span>
+                                                        }
+                                                    })
+                                                        : <span><FormattedMessage id={"detail-product.no-data"} /></span>
+                                                    }
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -243,7 +282,7 @@ class DetailProduct extends Component {
                         <h5 className=' font-weight-bold'>Đánh giá sản phẩm</h5>
                         <CommentProduct
                             userInfo={this.props.userInfo}
-                            productId={dataProduct ? dataProduct.id : ''}
+                            productId={this.props.match && this.props.match.params && this.props.match.params.id}
                             dataCommentProduct={this.props.dataCommentProduct}
                         />
                     </div>
@@ -266,14 +305,16 @@ class DetailProduct extends Component {
 const mapStateToProps = state => {
     return {
         userInfo: state.user.userInfo,
-        dataCommentProduct: state.admin.commentProduct
+        dataCommentProduct: state.admin.commentProduct,
+        listAges: state.admin.ageUseProducts,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
         fetchAddItemCart: (data) => dispatch(actions.fetchAddItemCart(data)),
-        fetchAllCommentByProductIdRedux: (id) => dispatch(actions.fetchAllCommentByProductId(id))
+        fetchAllCommentByProductIdRedux: (id) => dispatch(actions.fetchAllCommentByProductId(id)),
+        fetchAllcodeAgeUseProduct: () => dispatch(actions.fetchAllcodeAgeUseProduct()),
     };
 };
 

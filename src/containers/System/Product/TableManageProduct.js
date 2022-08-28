@@ -3,19 +3,31 @@ import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import './TableManageProduct.scss'
 import * as actions from '../../../store/actions';
-import MarkdownIt from 'markdown-it';
+import Select from "react-select";
 import { toast } from 'react-toastify';
 import { handleChangeStatusProduct } from '../../../services/userService';
+import { emitter } from '../../../utils/emitter';
+import { CommonUtils } from '../../../utils';
 
 class TableManageProduct extends Component {
     constructor(props) {
         super(props);
         this.state = {
             productRedux: [],
-            errMessage: ""
+            errMessage: "",
+            dataProduct: '',
+            selectedProduct: '',
         }
+        this.listenToEmitter();
     }
-
+    listenToEmitter() {
+        emitter.on('EVENT_CLEAR_MODAL_DATA', () => {
+            //reset state
+            this.setState({
+                selectedProduct: ''
+            })
+        })
+    }
     async componentDidMount() {
         this.props.fetchProductRedux({
             statusId: "ALL",
@@ -26,13 +38,46 @@ class TableManageProduct extends Component {
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevProps.listProducts !== this.props.listProducts) {
+            let copyListProducts = [...this.props.listProducts];
+            copyListProducts.unshift({
+                createdAt: null,
+                name: "Tất cả",
+                id: "ALL"
+            })
+            let dataProduct = this.buildDataInputSelect(copyListProducts)
             this.setState({
-                productRedux: this.props.listProducts
+                productRedux: this.props.listProducts,
+                dataProduct,
+                dataExport: this.buildDataExport(this.props.listProducts)
             })
         }
     }
+    buildDataInputSelect = (inputData) => {
+        let result = []
+        if (inputData && inputData.length > 0) {
+            inputData.map((item, index) => {
+                let object = {};
+                object.label = item.name
+                object.value = item.id;
+                result.push(object)
+            })
+        }
+        return result;
+    }
+    handleChangeSelect = (selectedOption, name) => {
+        console.log("check selectredOption: ", selectedOption);
+        let stateName = name.name;
+        let stateCopy = { ...this.state }
+        stateCopy[stateName] = selectedOption;
+        this.setState({
+            ...stateCopy
+        })
+    }
     handleDeleteProduct = (product) => {
-        this.props.deleteAProductRedux(product.id);
+        this.props.deleteAProductRedux(product);
+        this.setState({
+            selectedProduct: ''
+        })
     }
     handleEditProduct = (product) => {
         this.props.handleEditProductFromParentKey(product)
@@ -72,11 +117,70 @@ class TableManageProduct extends Component {
             toast.error("Thao tác thất bại! Vui lòng thử lại sau.")
         }
     }
+    buildDataExport = (data) => {
+        let result = []
+        data && data.length > 0 && data.map(item => {
+            let arrAge = []
+            let object = {}
+            if (item.productAgeData && item.productAgeData.length > 0) {
+                for (const iterator of item.productAgeData) {
+                    iterator.status === 1 && arrAge.push(iterator.AgeUseProductData.value)
+                }
+            }
+            object.Id = item.id
+            object.Name = item.name
+            object.Brand = item.brandData.value
+            object.Category = item.categoryData.value
+            object.Warranty = item.warrantyData.value
+            object.Origin = item.origin
+            object.Material = item.material
+            object.Long = item.long
+            object.Width = item.width
+            object.Height = item.height
+            object.Weight = item.weight
+            object.Stock = item.stock
+            object.View = item.view
+            object.Buys = item.count
+            object.AgeUseProduct = arrAge && arrAge.length > 0 ? arrAge.join(", ") : "Chưa có dữ liệu độ tuổi sử dụng sản phẩm"
+            object.OriginalPrice = item.originalPrice.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })
+            object.PercentDiscount = item.percentDiscount + '%'
+            object.DiscountPrice = item.discountPrice.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })
+            result.push(object)
+        })
+        return result
+    }
+    handleExportExcel = async () => {
+        let { dataExport } = this.state
+        let nameFile = `ListProduct-${new Date().getTime()}`
+        await CommonUtils.exportExcel(dataExport, "Danh sách sản phẩm", nameFile)
+    }
     render() {
         let arrProducts = this.state.productRedux;
+        let { selectedProduct, dataProduct } = this.state
+        arrProducts = selectedProduct && selectedProduct.value !== "ALL" ? arrProducts.filter(item => item.id === selectedProduct.value) : arrProducts
         return (
             <>
-                <table id='TableManageProduct'>
+                <div className='row'>
+                    <Select
+                        value={selectedProduct}
+                        onChange={this.handleChangeSelect}
+                        options={dataProduct}
+                        name={'selectedProduct'}
+                        placeholder='Lọc sản phẩm theo tên...'
+                        className="col-6"
+                    />
+                    <div className='col-6' >
+                        <button className='btn btn-success btn-lg'
+                            style={{ float: "right", width: "11rem", height: "3rem" }}
+                            onClick={() => this.handleExportExcel()}
+                        >
+                            Xuất
+                            &nbsp;
+                            <i style={{ fontSize: "18px" }} className="fas fa-file-excel"></i>
+                        </button>
+                    </div>
+                </div>
+                <table id='TableManageProduct' className='mt-3'>
                     <tbody>
                         <tr>
                             <th>STT</th>
@@ -146,14 +250,14 @@ class TableManageProduct extends Component {
 
 const mapStateToProps = state => {
     return {
-        listProducts: state.admin.products
+        listProducts: state.admin.products,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
         fetchProductRedux: (data) => dispatch(actions.fetchAllProducts(data)),
-        deleteAProductRedux: (id) => dispatch(actions.deleteAProduct(id)),
+        deleteAProductRedux: (data) => dispatch(actions.deleteAProduct(data)),
     };
 };
 

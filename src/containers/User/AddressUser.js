@@ -21,6 +21,7 @@ class AddressUser extends Component {
         }
     }
     async componentDidMount() {
+        this.props.showAvatar()
         window.scrollTo(0, 0)
         let userId = this.props.userId
         if (userId) {

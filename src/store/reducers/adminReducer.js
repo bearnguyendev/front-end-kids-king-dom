@@ -8,7 +8,7 @@ const initialState = {
     warranties: [],
     subjects: [],
     discounts: [],
-    sizes: [],
+    ageUseProducts: [],
     products: [],
     topProducts: [],
     newProducts: [],
@@ -129,17 +129,17 @@ const adminReducer = (state = initialState, action) => {
             return {
                 ...state,
             }
-        case actionTypes.FETCH_ALLCODE_SIZE_START:
+        case actionTypes.FETCH_ALLCODE_AGE_USE_PRODUCT_START:
             return {
                 ...state,
             }
-        case actionTypes.FETCH_ALLCODE_SIZE_SUCCESS:
-            state.sizes = action.dataSize;
+        case actionTypes.FETCH_ALLCODE_AGE_USE_PRODUCT_SUCCESS:
+            state.ageUseProducts = action.dataAgeUseProduct;
             return {
                 ...state,
             }
-        case actionTypes.FETCH_ALLCODE_SIZE_FAILED:
-            state.sizes = [];
+        case actionTypes.FETCH_ALLCODE_AGE_USE_PRODUCT_FAILED:
+            state.ageUseProducts = [];
             return {
                 ...state,
             }

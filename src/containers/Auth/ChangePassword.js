@@ -67,6 +67,12 @@ class ChangePassword extends Component {
                 }
                 if (data && data.errCode === 0) {
                     toast.success("Đổi mật khẩu thành công!")
+                    this.setState({
+                        oldPassword: "",
+                        newPassword: "",
+                        rePassword: "",
+                        errMessage: "",
+                    })
                     setTimeout(() => {
                         this.setState({
                             isSuccess: true

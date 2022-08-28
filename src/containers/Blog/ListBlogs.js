@@ -127,7 +127,7 @@ class ListBlogs extends Component {
                 selectedSubject: this.state.arrSubject.find(item => item.value === "ALL"),
                 valueSearch: "ALL"
             })
-            this.props.fetchProductRedux({
+            this.props.fetchAllBlogs({
                 statusId: "S1",
                 subjectId: "ALL",
                 valueSearch: this.state.valueSearch
@@ -137,7 +137,7 @@ class ListBlogs extends Component {
         }
     }
     render() {
-        let { arrBlogs, isOpen, selectedSubject, arrSubject, previewImgURL } = this.state
+        let { arrBlogs, isOpen, selectedSubject, arrSubject, previewImgURL, valueSearch } = this.state
         console.log("check data blog", this.state);
         return (
             <>
@@ -145,15 +145,15 @@ class ListBlogs extends Component {
                 <div className='blog-container'>
                     <div className='blog-nav-left'>
                         <div className='mt-5'>
-                            <form class="form-inline my-2 my-lg-0">
-                                <input className="input-search form-control mr-sm-3" type="search" placeholder="Nhập tên bài viết cần tìm..." aria-label="Search" size="24"
+                            <div className='d-inline-flex' style={{ width: "100%" }}>
+                                <input className="input-search form-control mr-sm-3" type="text" placeholder="Nhập tên bài viết cần tìm..." aria-label="Search" size="24"
                                     onChange={(event) => this.handleOnChangeInput(event, "valueSearch")}
-                                    autoComplete='off'
+                                    value={valueSearch === 'ALL' ? "" : valueSearch}
                                 />
                                 <button className="btn-search btn btn-outline-info  my-sm-0" type='button'
                                     onClick={() => this.handleClickSearch()}
                                 >Tìm kiếm</button>
-                            </form>
+                            </div>
                         </div>
                         <div className='my-3'>Tìm kiếm theo chủ đề</div>
                         <Select
@@ -169,7 +169,7 @@ class ListBlogs extends Component {
                     </div>
                     <div className='list-blog'>
                         <div className='item-blog px-3'>
-                            {arrBlogs && arrBlogs.length > 0 &&
+                            {arrBlogs && arrBlogs.length > 0 ?
                                 arrBlogs.map((item, index) => {
                                     let date = moment(item.createdAt).utc("+07:00").format("LLLL")
                                     return (
@@ -189,7 +189,10 @@ class ListBlogs extends Component {
                                             </div>
                                         </div>
                                     )
-                                })}
+                                })
+                                :
+                                <div className='no-data'>Không có bài đăng bạn tìm kiếm!</div>
+                            }
                         </div>
                     </div>
                 </div>

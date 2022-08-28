@@ -54,7 +54,7 @@ class ManageUser extends Component {
             let arrRoles = this.props.roleRedux
             this.setState({
                 roleArr: arrRoles,
-                roleId: arrRoles && arrRoles.length > 0 ? arrRoles[0].keyMap : ''
+                roleId: arrRoles && arrRoles.length > 0 ? arrRoles[1].keyMap : ''
             })
         }
         if (prevProps.listUsers !== this.props.listUsers) {
@@ -69,7 +69,7 @@ class ManageUser extends Component {
                 address: '',
                 genderId: arrGenders && arrGenders.length > 0 ? arrGenders[0].keyMap : '',
                 birthday: '',
-                roleId: arrRoles && arrRoles.length > 0 ? arrRoles[0].keyMap : '',
+                roleId: arrRoles && arrRoles.length > 0 ? arrRoles[1].keyMap : '',
                 image: '',
                 previewImgURL: '',
                 isChangeDate: false,
@@ -188,6 +188,7 @@ class ManageUser extends Component {
     // clickBtnMove = (id) => {
     //     document.getElementById(id).scrollIntoView();
     // }
+
     render() {
         let genders = this.state.genderArr;
         let roles = this.state.roleArr;

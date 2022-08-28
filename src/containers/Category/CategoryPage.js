@@ -2,10 +2,8 @@ import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import * as actions from "../../store/actions";
-import Lightbox from 'react-image-lightbox';
 import Select from "react-select";
 import "./CategoryPage.scss"
-import { CommonUtils } from '../../utils';
 import { withRouter } from 'react-router';
 import HomeNav from "../HomePage/HomeNav";
 import HomeFooter from "../HomePage/HomeFooter";
@@ -29,13 +27,17 @@ class CategoryPage extends Component {
             selectedBrand: '',
             valueSearch: "ALL",
             isSelectedSortCreatedAt: 0,
-            isSelectedSortView: 0
+            isSelectedSortView: 0,
+            scrollTop: 0,
+            arrAges: [],
+            selectedAges: []
         }
     }
     async componentDidMount() {
         window.scrollTo(0, 0)
         this.props.fetchAllcodeCategory()
         this.props.fetchAllcodeBrands()
+        //this.props.fetchAllcodeAgeUseProduct()
         this.props.fetchProductRedux({
             statusId: "S1",
             categoryId: "ALL",
@@ -43,6 +45,7 @@ class CategoryPage extends Component {
             valueSearch: this.state.valueSearch
         })
     }
+
     componentDidUpdate(prevProps, prevState, snapshot) {
         window.scrollTo(0, 0)
         if (prevProps.listCategory !== this.props.listCategory) {
@@ -78,6 +81,25 @@ class CategoryPage extends Component {
                 arrProduct: this.props.listProducts,
             })
         }
+        // if (prevProps.listAges !== this.props.listAges) {
+        //     let ageArr = this.props.listAges
+        //     this.setState({
+        //         arrAges: ageArr,
+        //     })
+        // }
+        // if (prevState.selectedAges !== this.state.selectedAges) {
+        //     let { arrProduct, selectedAges } = this.state
+        //     if (selectedAges && selectedAges.length > 0) {
+        //         for (const iterator of selectedAges) {
+        //             arrProduct = arrProduct && arrProduct.length > 0 && arrProduct.filter(item => {
+        //                 item.productAgeData && item.productAgeData.length > 0 && item.productAgeData.map(age =>
+        //                     age.ageId === iterator.keyMap && age.status === 1)
+        //                 return item
+        //             })
+        //         }
+        //         console.log("check select: ", arrProduct);
+        //     }
+        // }
     }
     buildDataInputSelect = (inputData) => {
         let result = []
@@ -223,6 +245,22 @@ class CategoryPage extends Component {
             })
         }
     }
+    // handleOnClickAge = async (age) => {
+    //     let { arrAges } = this.state;
+    //     if (arrAges && arrAges.length > 0) {
+    //         arrAges = arrAges.map(item => {
+    //             if (item.id === age.id) item.status = !item.status;
+    //             return item;
+    //         })
+    //         await this.setState({
+    //             arrAges
+    //         })
+    //         let selectedAges = arrAges.filter(item => item.status === true)
+    //         this.setState({
+    //             selectedAges
+    //         })
+    //     }
+    // }
     handleClickSearch = () => {
         try {
             let { valueSearch } = this.state
@@ -266,11 +304,10 @@ class CategoryPage extends Component {
             console.log(error);
         }
     }
-
     render() {
-        let { dataCategory, dataBrands, selectedCategory, selectedBrand, arrProduct, isSelectedSortCreatedAt, isSelectedSortView } = this.state
+        let { dataCategory, dataBrands, selectedCategory, selectedBrand, arrProduct, isSelectedSortCreatedAt, isSelectedSortView, valueSearch } = this.state
         //arrProduct = arrProduct.concat(arrProduct).concat(arrProduct).concat(arrProduct).concat(arrProduct)
-        console.log("check dataProduct: ", this.state);
+        console.log("check arrProduct: ", arrProduct);
         return (
             <>
                 <HomeNav />
@@ -281,21 +318,33 @@ class CategoryPage extends Component {
                             &nbsp;
                             Bộ lọc tìm kiếm
                         </div>
-                        <div className='my-3'>Theo danh mục</div>
+                        <div className='my-2'>Theo danh mục</div>
                         <Select
-                            //defaultValue={dataCategory}
                             value={selectedCategory}
                             onChange={this.handleChangeSelect}
                             options={dataCategory}
                             name={'selectedCategory'}
                         />
-                        <div className='my-3'>Theo thương hiệu</div>
+                        <div className='my-2'>Theo thương hiệu</div>
                         <Select
                             value={selectedBrand}
                             onChange={this.handleChangeSelect}
                             options={dataBrands}
                             name={'selectedBrand'}
                         />
+                        {/* <div className='my-2'>Theo độ tuổi</div>
+                        {arrAges && arrAges.length > 0 && arrAges.map((item, index) => {
+                            return (
+                                <div className="form-check col my-1">
+                                    <input className="form-check-input" type="checkbox" id={item.id} value={item.keyMap}
+                                        style={{ cursor: "pointer" }}
+                                        onClick={() => this.handleOnClickAge(item)}
+                                        checked={item.status === true ? true : false}
+                                    />
+                                    <label className="form-check-label" htmlFor={item.id} value={item.keyMap}>{item.value}</label>
+                                </div>
+                            )
+                        })} */}
                         <div className='btn-rs-filter'>
                             <button className={isSelectedSortView === 1 ? 'reset-filter active' : 'reset-filter'} onClick={() => this.handleClickSort("sortView")}>Sản phẩm nổi bật</button>
                         </div>
@@ -355,9 +404,10 @@ class CategoryPage extends Component {
                                     </ul>
                                 </div>
                                 <div>
-                                    <form class="form-inline my-2 my-lg-0">
-                                        <input className="input-search form-control mr-sm-3" type="search" placeholder="Nhập tên sản phẩm tìm kiếm..." aria-label="Search" size="30"
+                                    <form className="form-inline my-2 my-lg-0">
+                                        <input className="input-search form-control mr-sm-3" type="text" placeholder="Nhập tên sản phẩm tìm kiếm..." aria-label="Search" size="30"
                                             onChange={(event) => this.handleOnChangeInput(event, "valueSearch")}
+                                            value={valueSearch === "ALL" ? "" : valueSearch}
                                         />
                                         <button className="btn-search btn btn-outline-info  my-sm-0" type='button'
                                             onClick={() => this.handleClickSearch()}
@@ -390,7 +440,7 @@ class CategoryPage extends Component {
 
                         </div>
                         <div className='category-item-product'>
-                            {arrProduct && arrProduct.length > 0 &&
+                            {arrProduct && arrProduct.length > 0 ?
                                 arrProduct.map((item, index) => {
                                     return (
                                         <ItemProduct
@@ -400,6 +450,8 @@ class CategoryPage extends Component {
                                         />
                                     )
                                 })
+                                :
+                                <div className='d-flex' style={{ color: "red", fontSize: "3rem", margin: "auto" }}>Không có sản phẩm bạn tìm kiếm</div>
                             }
                         </div>
                     </div>
@@ -416,7 +468,8 @@ const mapStateToProps = state => {
         userInfo: state.user.userInfo,
         listCategory: state.admin.category,
         listBrands: state.admin.brands,
-        listProducts: state.admin.products
+        listProducts: state.admin.products,
+        //listAges: state.admin.ageUseProducts,
     };
 };
 
@@ -426,6 +479,7 @@ const mapDispatchToProps = dispatch => {
         fetchAllcodeCategory: () => dispatch(actions.fetchAllcodeCategory()),
         fetchAllcodeBrands: () => dispatch(actions.fetchAllcodeBrands()),
         fetchProductRedux: (data) => dispatch(actions.fetchAllProducts(data)),
+        //fetchAllcodeAgeUseProduct: () => dispatch(actions.fetchAllcodeAgeUseProduct()),
     };
 };
 

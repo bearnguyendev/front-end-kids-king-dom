@@ -30,8 +30,8 @@ class OrderUser extends Component {
         try {
             let res = await updateStatusOrderService({
                 id: data.id,
-                statusId: 'S7',
-                receiverOrderData: data
+                statusId: 'S8',
+                dataOrderUser: data
             })
             if (res && res.errCode === 0) {
                 toast.success(res.errMessage)
@@ -44,11 +44,12 @@ class OrderUser extends Component {
             console.log(error);
         }
     }
-    handleReceivedOrder = async (orderId) => {
+    handleReceivedOrder = async (data) => {
         try {
             let res = await updateStatusOrderService({
-                id: orderId,
-                statusId: 'S6'
+                id: data.id,
+                statusId: 'S7',
+                dataOrderUser: data
             })
             if (res && res.errCode === 0) {
                 toast.success("Đã nhận đơn hàng")
@@ -119,7 +120,7 @@ class OrderUser extends Component {
                                                     }
                                                     {
                                                         item1.statusId === 'S5' &&
-                                                        <div className='btn-buy' onClick={() => this.handleReceivedOrder(item1.id)} >
+                                                        <div className='btn-buy' onClick={() => this.handleReceivedOrder(item1)} >
                                                             <FormattedMessage id={"user.received"} />
                                                         </div>
                                                     }

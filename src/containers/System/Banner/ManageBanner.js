@@ -190,10 +190,10 @@ class ManageBanner extends Component {
                             </div>
                         </div>
                         <div className="card mb-4">
-                            <div className="card-header">
-                                <div className="title mb-2" >
-                                    <FormattedMessage id={"manage-banner.list"} />
-                                </div>
+                            <div className="card-header font-weight-bold">
+                                <i className="fas fa-table me-1" />
+                                &nbsp;
+                                <FormattedMessage id={"manage-banner.list"} />
                             </div>
                             <div className="card-body rounded">
                                 <TableManageBanner
@@ -201,7 +201,6 @@ class ManageBanner extends Component {
                                 />
                             </div>
                         </div>
-
                         {
                             isOpen === true &&
                             <Lightbox

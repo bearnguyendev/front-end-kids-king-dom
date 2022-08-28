@@ -65,7 +65,9 @@
             "manage-voucher":"Quản lý mã giảm giá",
             "type-voucher": "Quản lý loại giảm giá",
             "ship": "Phương thức vận chuyển",
-            "manage-ship": "Quản lý vận chuyển"
+            "manage-ship": "Quản lý vận chuyển",
+            "statistical": "Thống kê",
+            "website-parameters":"Thông số trang web"
         }
     },
     "manage-user":{
@@ -119,6 +121,7 @@
         "brandId": "Thuộc thương hiệu",
         "warrantyId": "Thời gian bảo hành",
         "shortDes": "Mô tả ngắn sản phẩm",
+        "age-use-product":"Độ tuổi sử dụng sản phẩm",
         "detail-info": "Thông tin chi tiết sản phẩm",
         "nameDetail": "Tên chi tiết sản phẩm",
         "long": "Chiều dài",
@@ -242,6 +245,7 @@
         "all-status": "Tất cả trạng thái đơn hàng",
         "id-order": "Mã đơn",
         "date": "Ngày đặt",
+        "date-success": "Ngày đơn hàng hoàn thành",
         "type-ship": "Phương thức vận chuyển",
         "voucher": "Mã giảm giá",
         "sum-bill":"Tổng đơn hàng",
@@ -256,7 +260,10 @@
         "quantity-product": "Số lượng",
         "sum-price-product": "Tổng giá",
         "note":"Lời nhắn:",
-        "no-note": "Người đặt không ghi chú"
+        "no-note": "Người đặt không ghi chú",
+        "no-voucher": "Người đặt không sử dụng mã giảm giá",
+        "no-note-user": "Bạn không ghi chú",
+        "no-voucher-user": "Bạn không sử dụng mã giảm giá"
     },
     "home-page":{
         "about": "Truyền thông nói về KisKingdom",
@@ -307,6 +314,9 @@
         "get-product": "Đã lấy hàng",
         "delivery": "Giao hàng",
         "received": "Đã giao hàng",
+        "received-user": "Đã nhận hàng",
+        "date":"Ngày đặt: ",
+        "dateSuccess": "Ngày giao thành công: ",
         "cancel-order":"Huỷ đơn"
     },
     "voucher":{
@@ -331,6 +341,7 @@
         "sum-price": "Tổng tiền",
         "no-price-ship": "Giá chưa bao gồm phí vận chuyển",
         "product":"sản phẩm",
+        "delete-cart": "Xoá giỏ hàng",
         "payment": "Thanh toán"
     },
     "user":{
@@ -340,7 +351,7 @@
         "address": "Địa chỉ",
         "change-password": "Đổi mật khẩu",
         "my-order": "Đơn mua",
-        "my-voucher": "Kho voucher",
+        "my-voucher": "Kho mã giảm giá",
         "edit-img": "Chỉnh sửa ảnh đại diện",
         "first-name": "Tên: ",
         "last-name": "Họ: ",
@@ -364,10 +375,11 @@
         "address-receiver": "Địa chỉ: ",
         "phone-number-receiver": "Số điện thoại: ",
         "title-change-password": "Để bảo mật tài khoản, vui lòng không chia sẻ mật khẩu cho người khác",
-        "name-shop": "KisKingdom",
+        "name-shop": " KisKingdom",
         "total-price":"Tổng số tiền: ",
         "cancel-order": "Huỷ đơn",
         "received": "Đã nhận hàng",
+        "detail-order": "Xem chi tiết đơn hàng",
         "verify-email":{
             "loading-data": "Đang tải dữ liệu...",
             "success": "Xác thực email thành công!",
@@ -382,6 +394,9 @@
         "content": "Phản hồi",
         "save": "Lưu",
         "close":"Đóng"
+    },
+    "detail-product":{
+        "no-data": "Chưa có dữ liệu!"
     }
 
 }

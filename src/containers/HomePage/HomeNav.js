@@ -6,6 +6,7 @@ import "./HomeNav.scss";
 import { withRouter } from 'react-router';
 import { Link, NavLink } from 'react-router-dom';
 import _ from 'lodash';
+import { path } from '../../utils';
 class HomeNav extends Component {
 
     constructor(props) {
@@ -34,7 +35,7 @@ class HomeNav extends Component {
     }
     returnToHome = () => {
         if (this.props.history) {
-            this.props.history.push(`/home`)
+            this.props.history.push(path.HOMEPAGE)
         }
     }
     render() {
@@ -49,16 +50,16 @@ class HomeNav extends Component {
                         </div>
                     </div>
                     <div className='center-content'>
-                        <NavLink to={"/home"} activeClassName="selected">
+                        <NavLink to={path.HOMEPAGE} activeClassName="selected">
                             <div className="title-content">Trang chủ</div>
                         </NavLink>
-                        <NavLink to={"/category"} activeClassName="selected" >
+                        <NavLink to={path.CATEGORY} activeClassName="selected" >
                             <div className="title-content">Sản phẩm</div>
                         </NavLink>
-                        <NavLink to={"/blog"} activeClassName="selected" >
+                        <NavLink to={path.BLOG} activeClassName="selected" >
                             <div className="title-content">Bài viết</div>
                         </NavLink>
-                        <NavLink to={"/discount"} activeClassName="selected" >
+                        <NavLink to={path.VOUCHER} activeClassName="selected" >
                             <div className="title-content">Mã giảm giá</div>
                         </NavLink>
                     </div>
@@ -66,7 +67,7 @@ class HomeNav extends Component {
                         <div className='support'>
                             <i className="fas fa-question-circle"></i>Hỗ trợ
                         </div>
-                        <Link to={"/cart"}>
+                        <Link to={path.CART}>
                             <div className='cart'>
                                 <ion-icon name="cart-outline" style={{ fontSize: "2rem", color: "#666" }}></ion-icon>
                                 <span className="box-quantity-cart">{arrItemOfCart && !_.isEmpty(arrItemOfCart) && arrItemOfCart.ProductUserCartData ? arrItemOfCart.ProductUserCartData.length : 0}</span>
@@ -86,12 +87,12 @@ class HomeNav extends Component {
                             </>
                             :
                             <>
-                                <NavLink to={"/login"}>
+                                <NavLink to={path.LOGIN}>
                                     <div className='nav-login' title="Đăng nhập">
                                         <i className="fas fa-user-alt"></i>
                                     </div>
                                 </NavLink>
-                                <NavLink to={"/sign-up"}>
+                                <NavLink to={path.SIGNUP}>
                                     <div className='nav-sign-up' title="Đăng ký">
                                         <i className="fas fa-user-plus"></i>
                                     </div>

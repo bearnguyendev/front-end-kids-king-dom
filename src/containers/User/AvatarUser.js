@@ -37,21 +37,23 @@ class AvatarUser extends Component {
         }
     }
     render() {
-        let { userInfo } = this.props
+        let { userInfo, isHideAvatar } = this.props
         return (
             <LoadingOverlay
                 active={this.state.isShowLoading}
                 spinner
                 text='Loading...'>
-                <div className='content-right'>
-                    <div className='avatar-user'
-                        style={{ backgroundImage: `url(${userInfo && userInfo.image ? userInfo.image : 'https://www.seekpng.com/png/detail/428-4287240_no-avatar-user-circle-icon-png.png'})` }}
-                    >
+                {isHideAvatar === false &&
+                    <div className='content-right'>
+                        <div className='avatar-user'
+                            style={{ backgroundImage: `url(${userInfo && userInfo.image ? userInfo.image : 'https://www.seekpng.com/png/detail/428-4287240_no-avatar-user-circle-icon-png.png'})` }}
+                        >
+                        </div>
+                        {userInfo && userInfo.ActiveEmail === 0 &&
+                            <a href='#' onClick={() => this.handleClickSendMail(userInfo.id)}>Xác thực email ngay</a>
+                        }
                     </div>
-                    {userInfo && userInfo.ActiveEmail === 0 &&
-                        <a href='#' onClick={() => this.handleClickSendMail(userInfo.id)}>Xác thực email ngay</a>
-                    }
-                </div>
+                }
             </LoadingOverlay>
         );
     }

@@ -14,6 +14,7 @@ class VoucherUser extends Component {
         }
     }
     async componentDidMount() {
+        this.props.showAvatar()
         window.scrollTo(0, 0)
         let { userId } = this.props
         if (userId) {
@@ -66,7 +67,7 @@ class VoucherUser extends Component {
                         arrVoucher.map((item, index) => {
                             let typeVoucherFormat = item.typeVoucherOfVoucherData.type === 'percent' ? item.typeVoucherOfVoucherData.value + "%" : item.typeVoucherOfVoucherData.value.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })
                             let maxValue = item.typeVoucherOfVoucherData.maxValue ? item.typeVoucherOfVoucherData.maxValue : ''
-                            let minValue = item.typeVoucherOfVoucherData.minValue ? item.typeVoucherOfVoucherData.minValue : ''
+                            let minValue = item.typeVoucherOfVoucherData.minValue >= 0 ? item.typeVoucherOfVoucherData.minValue : ''
                             return (
                                 <ItemVoucher
                                     id={item.id}
