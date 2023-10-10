@@ -148,7 +148,7 @@ class ManageProduct extends Component {
     checkValidateInput = () => {
         let isValid = true
         let arrCheck = ['name', 'origin', 'material', 'categoryId', 'brandId',
-            'warrantyId', 'shortDes', 'nameDetail', 'long', 'width', 'height', 'weight', 'stock', 'originalPrice', 'percentDiscount', 'desMarkdown', 'desHTML']
+            'warrantyId', 'shortDes', 'nameDetail', 'long', 'width', 'height', 'weight', 'originalPrice', 'percentDiscount', 'desMarkdown', 'desHTML']
         for (let i = 0; i < arrCheck.length; i++) {
             if (!this.state[arrCheck[i]]) {
                 isValid = false;
@@ -491,14 +491,20 @@ class ManageProduct extends Component {
                                     </div>
                                 </div>
                             </div>
-                            <div className='col-3'>
-                                <label><FormattedMessage id={"manage-product.stock"} /></label>
-                                <input type='number'
-                                    className='form-control'
-                                    value={stock}
-                                    onChange={(event) => this.onChangeInput(event, 'stock')}
-                                />
-                            </div>
+                            {this.state.action === CRUD_ACTIONS.EDIT ?
+                                <div className='col-3'>
+                                    <label><FormattedMessage id={"manage-product.stock"} /></label>
+                                    <br></br>
+                                    <label>{stock}</label>
+                                    {/* <input type='number'
+                                className='form-control'
+                                value={stock}
+                                onChange={(event) => this.onChangeInput(event, 'stock')}
+                            /> */}
+                                </div> : <></>
+
+                            }
+
                             <div className='col-12 my-3' style={{ fontWeight: '600' }}>
                                 <FormattedMessage id={"manage-product.age-use-product"} />
                             </div>

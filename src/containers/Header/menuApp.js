@@ -70,4 +70,11 @@ export const adminMenu = [
             },
         ]
     },
+    { //Nhập hàng
+        name: 'menu.admin.import', menus: [
+            {
+                name: 'menu.admin.import', link: '/admin/manage-import'
+            },
+        ]
+    },
 ];

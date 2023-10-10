@@ -79,17 +79,20 @@
                     }
                     &:hover{
                         cursor: pointer;
-                        color: #EE4D2D !important;
-                        border-color: #EE4D2D !important;
+                        color: #EE4D2D ;
+                        color: #e2da18 !important;
+                        text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+                        border-color: #e2da18 !important;
                         .fa-star{
-                            color: #EE4D2D;
+                            color: #e2da18;
                         }
                     }
                     &.active{
-                        color: #EE4D2D !important;
-                        border-color: #EE4D2D !important;
+                        color: #e2da18 !important;
+                        text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+                        border-color: #e2da18 !important;
                         .fa-star{
-                            color: #EE4D2D;
+                            color: #e2da18;
                         }
                     }
                 }
@@ -138,7 +141,8 @@
                 .star-box{
                     width: 7rem;
                     .fa-star{
-                        color: #EE4D2D;
+                        color: #e2da18;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
                     }
                 }
                 .reply_btn{
@@ -166,9 +170,9 @@
                 margin-top: 0.75rem;
                 position: relative;
                 span{
-                    color: #bb6011;
+                    color: #0fbea9;
                     font-size: 16px;
-                    text-transform: capitalize;
+                    text-transform: uppercase;
                 }
                 p{
                     color: #333 !important;

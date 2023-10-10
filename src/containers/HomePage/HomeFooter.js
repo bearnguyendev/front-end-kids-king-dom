@@ -98,7 +98,7 @@ class HomeFooter extends Component {
                         </div>
                     </div>
                     <div className='homt-ft-down text-center'>
-                        <p>Bản quyền &copy; 2022 thuộc về Kidskingdom</p>
+                        <p>Bản quyền &copy; 2023 thuộc về Kidskingdom</p>
                     </div>
                 </div>
             </div>

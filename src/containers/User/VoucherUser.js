@@ -27,23 +27,23 @@ class VoucherUser extends Component {
             this.getDataVouchers()
         }
     }
-    compareDates = (d1, d2) => {
-        var parts = d1.split('/');
-        var d1 = Number(parts[2] + parts[1] + parts[0]); //yyyymmdd
-        parts = d2.split('/');
-        var d2 = Number(parts[2] + parts[1] + parts[0]);
-        if (d1 <= d2) return true
-        if (d1 >= d2) return false
-    }
+    // compareDates = (d1, d2) => {
+    //     var parts = d1.split('/');
+    //     var d1 = Number(parts[2] + parts[1] + parts[0]); //yyyymmdd
+    //     parts = d2.split('/');
+    //     var d2 = Number(parts[2] + parts[1] + parts[0]);
+    //     if (d1 <= d2) return true
+    //     if (d1 >= d2) return false
+    // }
     getDataVouchers = async () => {
         let { listVoucherByUserId } = this.props
         let arrTemp = []
         if (listVoucherByUserId && listVoucherByUserId.length > 0) {
-            let nowDate = moment.unix(Date.now() / 1000).format('DD/MM/YYYY')
+            let nowDate = moment.unix(Date.now() / 1000).format('YYYY/MM/DD')
             listVoucherByUserId.map((item) => {
-                let fromDate = moment.unix(item.fromDate / 1000).format('DD/MM/YYYY');
-                let toDate = moment.unix(item.toDate / 1000).format('DD/MM/YYYY');
-                if (item.number !== item.numberUsed && this.compareDates(toDate, nowDate) === false && this.compareDates(fromDate, nowDate) === true) {
+                let fromDate = moment.unix(item.fromDate / 1000).format('YYYY/MM/DD');
+                let toDate = moment.unix(item.toDate / 1000).format('YYYY/MM/DD');
+                if (item.number !== item.numberUsed && moment(fromDate).isSameOrBefore(nowDate) === true && moment(toDate).isSameOrAfter(nowDate) === true) {
                     arrTemp.push(item)
                 }
             })

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Slider from "react-slick";
 import { withRouter } from 'react-router';
 import * as actions from "../../../store/actions"
+import { toast } from 'react-toastify';
 class SliderProduct extends Component {
     constructor(props) {
         super(props)
@@ -25,11 +26,15 @@ class SliderProduct extends Component {
     }
     handleAddCart(item, userInfo) {
         try {
-            this.props.fetchAddItemCart({
-                userId: userInfo.id,
-                productId: item.id,
-                quantity: 1,
-            })
+            if (!userInfo) {
+                toast.error("Vui lòng đăng nhập trước khi thêm sản phẩm vào giỏ hàng! ")
+            } else {
+                this.props.fetchAddItemCart({
+                    userId: userInfo.id,
+                    productId: item.id,
+                    quantity: 1,
+                })
+            }
         } catch (error) {
             console.log(error);
         }

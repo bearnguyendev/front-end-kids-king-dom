@@ -206,7 +206,6 @@ class ManageVoucher extends Component {
                                     className='form-control'
                                     onChange={this.handleOnChangeDatePickerFromDate}
                                     value={fromDate}
-                                    minDate={"today"}
                                 />
                             </div>
                             <div className='col-3'>

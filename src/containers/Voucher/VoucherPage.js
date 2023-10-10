@@ -31,11 +31,14 @@ class VoucherPage extends Component {
         let { listVouchers } = this.props
         let arrTemp = []
         if (listVouchers && listVouchers.length > 0) {
-            let nowDate = moment.unix(Date.now() / 1000).format('DD/MM/YYYY')
+            let nowDate = moment.unix(Date.now() / 1000).format('YYYY/MM/DD')
             listVouchers.map((item) => {
-                let fromDate = moment.unix(item.fromDate / 1000).format('DD/MM/YYYY');
-                let toDate = moment.unix(item.toDate / 1000).format('DD/MM/YYYY');
-                if (item.number !== item.numberUsed && this.compareDates(toDate, nowDate) === false && this.compareDates(fromDate, nowDate) === true) {
+                let fromDate = moment.unix(item.fromDate / 1000).format('YYYY/MM/DD');
+                let toDate = moment.unix(item.toDate / 1000).format('YYYY/MM/DD');
+                // if (item.number !== item.numberUsed && this.compareDates(toDate, nowDate) === false && this.compareDates(fromDate, nowDate) === true) {
+                //     arrTemp.push(item)
+                // }
+                if (item.number !== item.numberUsed && moment(fromDate).isSameOrBefore(nowDate) === true && moment(toDate).isSameOrAfter(nowDate) === true) {
                     arrTemp.push(item)
                 }
             })

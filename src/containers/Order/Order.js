@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _, { random, round } from 'lodash';
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
@@ -10,9 +10,12 @@ import moment from 'moment';
 import "./Order.scss"
 import VoucherModal from '../Voucher/VoucherModal';
 import { toast } from 'react-toastify';
-import { createNewOrderService } from '../../services/userService';
+import { createNewOrderService, paymentMomoService, paymentPayPalService } from '../../services/userService';
 import HomeFooter from '../HomePage/HomeFooter';
 import { withRouter } from 'react-router';
+import { path } from '../../utils';
+const USD = process.env.REACT_APP_RATE_USD
+
 class Order extends Component {
 
     constructor(props) {
@@ -26,7 +29,9 @@ class Order extends Component {
             selectedVoucher: '',
             selectedTypeShip: '',
             receiverId: '',
-            note: ''
+            note: '',
+            isPaymentOnl: 0,
+            isPaymentSelect: 0, // 1: Paypal 0:Momo
         }
     }
     async componentDidMount() {
@@ -76,11 +81,11 @@ class Order extends Component {
         let { listVoucherByUserId } = this.props
         let arrTemp = []
         if (listVoucherByUserId && listVoucherByUserId.length > 0) {
-            let nowDate = moment.unix(Date.now() / 1000).format('DD/MM/YYYY')
+            let nowDate = moment.unix(Date.now() / 1000).format('YYYY/MM/DD')
             listVoucherByUserId.map((item) => {
-                let fromDate = moment.unix(item.fromDate / 1000).format('DD/MM/YYYY');
-                let toDate = moment.unix(item.toDate / 1000).format('DD/MM/YYYY');
-                if (item.number !== item.numberUsed && this.compareDates(toDate, nowDate) === false && this.compareDates(fromDate, nowDate) === true) {
+                let fromDate = moment.unix(item.fromDate / 1000).format('YYYY/MM/DD');
+                let toDate = moment.unix(item.toDate / 1000).format('YYYY/MM/DD');
+                if (item.number !== item.numberUsed && moment(fromDate).isSameOrBefore(nowDate) === true && moment(toDate).isSameOrAfter(nowDate) === true) {
                     arrTemp.push(item)
                 }
             })
@@ -132,7 +137,7 @@ class Order extends Component {
         }
     }
     handleOrder = async (totalPriceDiscount) => {
-        let { selectedTypeShip, dataItemOfCart, receiverId, selectedVoucher, note } = this.state
+        let { selectedTypeShip, dataItemOfCart, receiverId, selectedVoucher, note, isPaymentOnl, isPaymentSelect } = this.state
         if (dataItemOfCart.ProductUserCartData.length <= 0) {
             toast.error("Không có sản phẩm. Không thể tiến hành đặt hàng!")
         } else {
@@ -149,26 +154,101 @@ class Order extends Component {
                 })
                 let userId = this.props.userInfo.id
                 if (userId) {
-                    let res = await createNewOrderService({
-                        orderDate: Date.now(),
-                        receiverId: receiverId,
-                        typeShipId: selectedTypeShip.id,
-                        voucherId: selectedVoucher.id,
-                        note: note,
-                        //totalPayment: totalPriceDiscount > 0 ? totalPriceDiscount + selectedTypeShip.price : selectedTypeShip.price,
-                        totalPayment: totalPriceDiscount,
-                        userId: userId,
-                        arrDataCart: result
-                    })
-                    if (res && res.errCode === 0) {
-                        toast.success(res.errMessage)
-                        await this.props.fetchAllCartByUserId(userId)
-                        setTimeout(() => {
-                            this.props.history.push(`/user/order/${userId}`)
-                        }, 3000)
+                    console.log("check result: ", result);
+                    if (isPaymentOnl === 0) {
+                        let res = await createNewOrderService({
+                            orderDate: Date.now(),
+                            receiverId: receiverId,
+                            typeShipId: selectedTypeShip.id,
+                            voucherId: selectedVoucher.id,
+                            note: note,
+                            //totalPayment: totalPriceDiscount > 0 ? totalPriceDiscount + selectedTypeShip.price : selectedTypeShip.price,
+                            totalPayment: totalPriceDiscount,
+                            userId: userId,
+                            arrDataCart: result
+                        })
+                        if (res && res.errCode === 0) {
+                            toast.success(res.errMessage)
+                            await this.props.fetchAllCartByUserId(userId)
+                            setTimeout(() => {
+                                this.props.history.push(`/user/order/${userId}`)
+                            }, 3000)
+                        } else {
+                            toast.error(res.errMessage)
+                        }
                     } else {
-                        toast.error(res.errMessage)
+                        if (isPaymentSelect === 1) {
+                            let VNDtoUSD = (item1 => item1 / +USD)
+                            let items = [];
+                            dataItemOfCart.ProductUserCartData.map((item, index) => {
+                                let object = {};
+                                object.name = item.name + " | " + item.brandId
+                                object.sku = item.Cart.productId + ''
+                                object.price = '' + VNDtoUSD(item.discountPrice).toFixed(2)
+                                object.currency = "USD"
+                                object.quantity = item.Cart.quantity
+                                items.push(object)
+                            })
+                            items.push({
+                                "name": "Phi ship",
+                                "sku": "S1",
+                                "price": VNDtoUSD(selectedTypeShip.price).toFixed(2) + "",
+                                "currency": "USD",
+                                "quantity": 1
+                            })
+                            console.log(VNDtoUSD(totalPriceDiscount > 0 ? totalPriceDiscount + selectedTypeShip.price : selectedTypeShip.price));
+                            let res = await paymentPayPalService({
+                                totalPayment: '' + VNDtoUSD(totalPriceDiscount > 0 ? totalPriceDiscount + selectedTypeShip.price : selectedTypeShip.price).toFixed(2),
+                                items,
+                            })
+
+                            if (res && res.errCode === 0) {
+                                localStorage.setItem("orderData", JSON.stringify({
+                                    orderDate: Date.now(),
+                                    receiverId: receiverId,
+                                    isPaymentOnl: isPaymentOnl === 1 ? 1 : 0,
+                                    typeShipId: selectedTypeShip.id,
+                                    voucherId: selectedVoucher.id,
+                                    note: note,
+                                    userId: userId,
+                                    arrDataCart: result,
+                                    totalPayment: totalPriceDiscount,
+                                    totalPaymentUSD: '' + VNDtoUSD(totalPriceDiscount > 0 ? totalPriceDiscount + selectedTypeShip.price : selectedTypeShip.price).toFixed(2)
+                                }))
+                                window.location.href = res.link
+                            }
+                            //window.location.href = path.INFO_PAYMENT 
+                        } else {
+                            try {
+                                let orderId = _.random(1, 999999) + ''
+                                let data = {
+                                    amount: "" + (totalPriceDiscount > 0 ? totalPriceDiscount + selectedTypeShip.price : selectedTypeShip.price),
+                                    orderId,
+                                    orderInfo: `Thanh toán đơn hàng ${orderId}`,
+                                }
+                                let res = await paymentMomoService(data)
+                                if (res && res.res.errorCode === 0) {
+                                    localStorage.setItem("orderData", JSON.stringify({
+                                        orderDate: Date.now(),
+                                        receiverId: receiverId,
+                                        isPaymentOnl: isPaymentOnl === 1 ? 1 : 0,
+                                        typeShipId: selectedTypeShip.id,
+                                        voucherId: selectedVoucher.id,
+                                        note: note,
+                                        userId: userId,
+                                        arrDataCart: result,
+                                        totalPayment: totalPriceDiscount,
+                                    }))
+                                    window.location.href = res.res.payUrl
+                                    console.log("check res: ", res.res.payUrl);
+                                }
+                            } catch (error) {
+                                console.error('Failed to generate payment URL: ', error);
+                            }
+                        }
+
                     }
+
                 }
             }
         }
@@ -178,8 +258,15 @@ class Order extends Component {
             receiverId: id
         })
     }
+    setIsPaymentOnl = (number, id) => {
+        let copyState = { ...this.state };
+        copyState[id] = number;
+        this.setState({
+            ...copyState
+        })
+    }
     render() {
-        let { dataItemOfCart, sumCart, arrTypeShips, selectedVoucher, selectedTypeShip } = this.state
+        let { dataItemOfCart, sumCart, arrTypeShips, selectedVoucher, selectedTypeShip, isPaymentOnl, isPaymentSelect } = this.state
         console.log("check state: ", this.state);
         return (
             <>
@@ -272,9 +359,22 @@ class Order extends Component {
                         </div>
                         <div className='payment-methods py-4'>
                             <FormattedMessage id={"order.payment-methods"} />
-                            <span className='ship-cod'>
+                            <span className={isPaymentOnl === 1 ? 'ship active' : 'ship'}
+                                onClick={() => this.setIsPaymentOnl(1, "isPaymentOnl")}
+                            >
+                                <FormattedMessage id={"order.payment-onl"} />
+                            </span>
+                            <span className={isPaymentOnl === 0 ? 'ship active' : 'ship'}
+                                onClick={() => this.setIsPaymentOnl(0, "isPaymentOnl")}
+                            >
                                 <FormattedMessage id={"order.ship-cod"} />
                             </span>
+                            <div className='payment-onl' style={isPaymentOnl === 0 ? { visibility: "hidden" } : { visibility: "visible" }}>
+                                <span className={isPaymentSelect === 0 ? 'type-payment active mx-3' : 'type-payment mx-3'}
+                                    onClick={() => this.setIsPaymentOnl(0, "isPaymentSelect")}><FormattedMessage id={"order.payment-momo"} /></span>
+                                <span className={isPaymentSelect === 1 ? 'type-payment active' : 'type-payment'}
+                                    onClick={() => this.setIsPaymentOnl(1, "isPaymentSelect")}><FormattedMessage id={"order.payment-paypal"} /></span>
+                            </div>
                         </div>
                         <div className='payment-cart'>
                             <div className='sum-cart'>

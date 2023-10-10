@@ -18,6 +18,7 @@ import ManageVoucher from '../containers/System/Voucher/ManageVoucher';
 import ManageOrder from '../containers/System/Order/ManageOrder';
 import DetailOrder from '../containers/System/Order/DetailOrder';
 import ManageStatistical from '../containers/System/Statistical/ManageStatistical';
+import ManageImport from '../containers/System/Import/ManageImport';
 class System extends Component {
     render() {
         const { systemMenuPath, isAdmin } = this.props;
@@ -42,11 +43,12 @@ class System extends Component {
                             <Route path={path.MANAGE_ORDER} exact component={ManageOrder} />
                             <Route path={path.DETAIL_ORDER} exact component={DetailOrder} />
                             <Route path={path.MANAGE_STATISTICAL} exact component={ManageStatistical} />
+                            <Route path={path.MANAGE_IMPORT} exact component={ManageImport} />
                             <Route component={() => { return (<Redirect to={systemMenuPath} />) }} />
                         </Switch>
                     </div>
                     <div className='text-center' style={{ position: "absolute", width: "100%" }}>
-                        <p>Bản quyền &copy; 2022 thuộc về Kidskingdom</p>
+                        <p>Bản quyền &copy; 2023 thuộc về Kidskingdom</p>
                     </div>
                 </div>
             </>

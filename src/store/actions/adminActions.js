@@ -1,5 +1,5 @@
 import actionTypes from './actionTypes';
-import { getAllCodeService, createANewUser, deleteUserService, editUserService, getAllUsers, getAllProducts, deleteProductService, getAllProductImageFromProductService, getAllBanners, getAllTypeShips, getAllBlogs, getAllTypeVouchers, getAllVouchers, getTopProductHomePage, getListBanners, getListBlogs, getAllReceiverByUserIdService, getAllVoucherByUserId, getDetailUserById, getAllOrderByUserIdService, getAllOrderService, getDetailOrderByIdService, getAllCommentByProductIdService } from "../../services/userService";
+import { getAllCodeService, createANewUser, deleteUserService, editUserService, getAllUsers, getAllProducts, deleteProductService, getAllProductImageFromProductService, getAllBanners, getAllTypeShips, getAllBlogs, getAllTypeVouchers, getAllVouchers, getTopProductHomePage, getListBanners, getListBlogs, getAllReceiverByUserIdService, getAllVoucherByUserId, getDetailUserById, getAllOrderByUserIdService, getAllOrderService, getDetailOrderByIdService, getAllCommentByProductIdService, getAllImports } from "../../services/userService";
 import { toast } from 'react-toastify'
 export const fetchAllcodeGenders = () => {
     return async (dispatch, getState) => {
@@ -757,6 +757,29 @@ export const fetchAllCommentByProductId = (productId) => {
                 type: actionTypes.FETCH_ALL_COMMENT_BY_PRODUCT_ID_FAILED
             })
             console.log("FETCH_ALL_COMMENT_BY_PRODUCT_ID_FAILED: ", error);
+        }
+    }
+}
+export const fetchAllImports = () => {
+    return async (dispatch, getState) => {
+        try {
+            dispatch({ type: actionTypes.FETCH_ALL_IMPORT_START })
+            let res = await getAllImports();
+            if (res && res.errCode === 0) {
+                dispatch({
+                    type: actionTypes.FETCH_ALL_IMPORT_SUCCESS,
+                    dataImport: res.data,
+                })
+            } else {
+                dispatch({
+                    type: actionTypes.FETCH_ALL_IMPORT_FAILED
+                })
+            }
+        } catch (error) {
+            dispatch({
+                type: actionTypes.FETCH_ALL_IMPORT_FAILED
+            })
+            console.log("FETCH_ALL_IMPORT_FAILED: ", error);
         }
     }
 }

@@ -152,6 +152,7 @@ class OrderUser extends Component {
                             <div key={index}>
                                 {item.receiverOrderData && item.receiverOrderData.length > 0 &&
                                     item.receiverOrderData.map((item1, index1) => {
+                                        console.log(item);
                                         return (
                                             <div key={index1}>
                                                 <div className='box-list-order'>
@@ -161,7 +162,7 @@ class OrderUser extends Component {
                                                             <Link to={`/user/detail-order/${item1.id}`}><FormattedMessage id={"user.detail-order"} /></Link>
                                                         </div>
                                                         <div className={item1.statusOrderData && item1.statusOrderData.keyMap === "S8" ? "text-danger" : 'content-right-order'} >
-                                                            {item1.statusOrderData && item1.statusOrderData.value}
+                                                            {item1.statusOrderData && item1.statusOrderData.value} {item1.isPaymentOnl === 1 && ' | Đã thanh toán'}
                                                         </div>
                                                     </div>
                                                     {item1.OrderDetailData && item1.OrderDetailData.length > 0 &&

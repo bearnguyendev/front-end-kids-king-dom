@@ -14,6 +14,7 @@ import "./DetailProduct.scss"
 import img from "../../assets/images/Product/icon-chinh-hang.png"
 import CommentProduct from './CommentProduct';
 import LikeAndShare from '../../components/SocialPlugin/LikeAndShare';
+import { toast } from 'react-toastify';
 class DetailProduct extends Component {
 
     constructor(props) {
@@ -87,14 +88,18 @@ class DetailProduct extends Component {
         try {
             let { dataProduct } = this.state
             let { userInfo } = this.props
-            this.props.fetchAddItemCart({
-                userId: userInfo.id,
-                productId: dataProduct.id,
-                quantity: +this.state.quantityProduct,
-            })
-            this.setState({
-                quantityProduct: 1
-            })
+            if (!userInfo) {
+                toast.error("Vui lòng đăng nhập trước khi thêm sản phẩm vào giỏ hàng! ")
+            } else {
+                this.props.fetchAddItemCart({
+                    userId: userInfo.id,
+                    productId: dataProduct.id,
+                    quantity: +this.state.quantityProduct,
+                })
+                this.setState({
+                    quantityProduct: 1
+                })
+            }
         } catch (error) {
             console.log(error);
         }

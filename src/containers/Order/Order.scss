@@ -153,11 +153,27 @@
             }
         }
         .payment-methods{
-            .ship-cod{
-                border:1px solid rgb(7, 231, 52);
-                color: rgb(7, 231, 52);
+            .ship{
+                cursor: pointer;
+                &.active{
+                    border:1px solid rgb(7, 231, 52);
+                    color: rgb(7, 231, 52);
+                }
                 padding: 1%;
                 border-radius: 3px;
+            }
+            .payment-onl{
+                padding: 3%;
+                margin-left: 5rem;
+                .type-payment{
+                    cursor: pointer;
+                    &.active{
+                        border:1px solid rgb(231, 104, 7);
+                        color: rgb(231, 104, 7);
+                    }
+                    padding: 1%;
+                    border-radius: 3px;
+                }
             }
         }
         .payment-cart{

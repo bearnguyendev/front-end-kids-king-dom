@@ -28,6 +28,7 @@ const initialState = {
     orders: [],
     orderById: {},
     commentProduct: {},
+    imports: [],
 }
 const adminReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -421,6 +422,20 @@ const adminReducer = (state = initialState, action) => {
             }
         case actionTypes.FETCH_ALL_COMMENT_BY_PRODUCT_ID_FAILED:
             state.commentProduct = [];
+            return {
+                ...state,
+            }
+        case actionTypes.FETCH_ALL_IMPORT_START:
+            return {
+                ...state,
+            }
+        case actionTypes.FETCH_ALL_IMPORT_SUCCESS:
+            state.imports = action.dataImport;
+            return {
+                ...state,
+            }
+        case actionTypes.FETCH_ALL_IMPORT_FAILED:
+            state.imports = [];
             return {
                 ...state,
             }

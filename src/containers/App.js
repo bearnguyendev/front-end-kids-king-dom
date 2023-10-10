@@ -31,6 +31,8 @@ import CategoryPage from './Category/CategoryPage';
 import DetailBlog from './Blog/DetailBlog';
 import ListBlogs from './Blog/ListBlogs';
 import ActiveEmail from './User/ActiveEmail';
+import PaymentSuccess from './User/PaymentSuccess';
+import PaymentFrom from './Order/PaymentFrom';
 
 
 class App extends Component {
@@ -76,6 +78,8 @@ class App extends Component {
                                     <Route path={path.DETAIL_PRODUCT} component={DetailProduct} />
                                     <Route path={path.BLOG} component={ListBlogs} />
                                     <Route path={path.DETAIL_BLOG} component={DetailBlog} />
+                                    <Route path={path.PAYMENT_SUCCESS} component={userIsAuthenticated(PaymentSuccess)} />
+                                    <Route path={path.PAYMENT_FROM} component={userIsAuthenticated(PaymentFrom)} />
                                     <Route path={path.USER} component={userIsAuthenticated(User)} />
                                     <Route component={() => { return (<Redirect to={path.HOME} />) }} />
                                 </Switch>

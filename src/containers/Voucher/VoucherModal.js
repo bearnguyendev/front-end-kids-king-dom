@@ -136,7 +136,7 @@ class VoucherModal extends Component {
                                             name={findVoucher.codeVoucher}
                                             widthPercent={findVoucher.numberUsed * 100 / findVoucher.number}
                                             maxValue={findVoucher.typeVoucherOfVoucherData.maxValue ? findVoucher.typeVoucherOfVoucherData.maxValue.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }) : ''}
-                                            minValue={findVoucher.typeVoucherOfVoucherData.minValue ? findVoucher.typeVoucherOfVoucherData.minValue.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }) : ''}
+                                            minValue={findVoucher.typeVoucherOfVoucherData.minValue >= 0 ? findVoucher.typeVoucherOfVoucherData.minValue.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }) : ''}
                                             numberUsed={Math.round((findVoucher.numberUsed * 100 / findVoucher.number) * 10) / 10}
                                             typeVoucher={findVoucher.typeVoucherOfVoucherData.type === 'percent' ? findVoucher.typeVoucherOfVoucherData.value + "%" : findVoucher.typeVoucherOfVoucherData.value.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}
                                             isShowUseVoucher={true}

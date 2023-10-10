@@ -36,6 +36,7 @@ class Welcome extends Component {
                     <div><Link to={path.MANAGE_VOUCHER}><FormattedMessage id={"menu.admin.manage-voucher"} /></Link></div>
                     <div><Link to={path.MANAGE_TYPE_SHIP}><FormattedMessage id={"menu.admin.manage-ship"} /></Link></div>
                     <div><Link to={path.MANAGE_STATISTICAL}><FormattedMessage id={"menu.admin.website-parameters"} /></Link></div>
+                    <div><Link to={path.MANAGE_IMPORT}><FormattedMessage id={"menu.admin.manage-import"} /></Link></div>
                 </div>
             </>
         );

@@ -172,6 +172,7 @@ class ListOrder extends Component {
                                 <th><FormattedMessage id={"manage-order.voucher"} /></th>
                                 <th><FormattedMessage id={"manage-order.sum-bill"} /></th>
                                 <th><FormattedMessage id={"manage-order.status"} /></th>
+                                <th><FormattedMessage id={"manage-order.payment"} /></th>
                                 <th><FormattedMessage id={"manage-order.action"} /></th>
                             </tr>
                         </thead>
@@ -188,6 +189,7 @@ class ListOrder extends Component {
                                             <td>{item.typeShipData.type && item.typeShipData.type}</td>
                                             <td>{item.voucherData && item.voucherData.codeVoucher ? item.voucherData.codeVoucher : "Không sử dụng mã giảm giá"}</td>
                                             <td>{item.totalPayment > 0 ? (item.totalPayment + item.typeShipData.price).toLocaleString('it-IT', { style: 'currency', currency: 'VND' }) : item.typeShipData.price.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}</td>
+                                            <td><FormattedMessage id={item.isPaymentOnl === 1 ? "order.paid" : "order.unpaid"} /></td>
                                             <td>{item.statusOrderData.value}</td>
                                             <td>
                                                 <Link to={`/admin/order-detail/${item.id}`}><FormattedMessage id={"manage-order.view"} /></Link>

@@ -98,7 +98,7 @@ class PaymentOrder extends Component {
                 </div>
                 <div className="content-top">
                     <span><FormattedMessage id={"order.type-payment"} /></span>
-                    <div className='box-type-payment active'><FormattedMessage id={"order.ship-cod"} /></div>
+                    <div className='box-type-payment active'>{dataOrder.isPaymentOnl === 0 ? <FormattedMessage id={"order.ship-cod"} /> : <FormattedMessage id={"order.payment-onl"} />} </div>
 
                 </div>
                 <div className="content-top">

@@ -5,6 +5,7 @@ import * as actions from "../../store/actions";
 import "./ItemProduct.scss"
 import { withRouter } from 'react-router';
 import "./ItemProduct.scss"
+import { toast } from 'react-toastify';
 class ItemProduct extends Component {
 
     constructor(props) {
@@ -25,11 +26,15 @@ class ItemProduct extends Component {
     }
     handleAddCart(item, userInfo) {
         try {
-            this.props.fetchAddItemCart({
-                userId: userInfo.id,
-                productId: item.id,
-                quantity: 1,
-            })
+            if (!userInfo) {
+                toast.error("Vui lòng đăng nhập trước khi thêm sản phẩm vào giỏ hàng! ")
+            } else {
+                this.props.fetchAddItemCart({
+                    userId: userInfo.id,
+                    productId: item.id,
+                    quantity: 1,
+                })
+            }
         } catch (error) {
             console.log(error);
         }

@@ -67,7 +67,9 @@
             "ship": "Phương thức vận chuyển",
             "manage-ship": "Quản lý vận chuyển",
             "statistical": "Thống kê",
-            "website-parameters":"Thông số trang web"
+            "website-parameters":"Thông số trang web",
+            "import":"Nhập hàng",
+            "manage-import": "Quản lý nhập hàng"
         }
     },
     "manage-user":{
@@ -263,7 +265,23 @@
         "no-note": "Người đặt không ghi chú",
         "no-voucher": "Người đặt không sử dụng mã giảm giá",
         "no-note-user": "Bạn không ghi chú",
-        "no-voucher-user": "Bạn không sử dụng mã giảm giá"
+        "no-voucher-user": "Bạn không sử dụng mã giảm giá", 
+        "payment" :"Thanh toán"
+    },
+    "manage-import":{
+        "title":"Quản lý nhập hàng",
+        "add": "Thêm mới phiếu nhập",
+        "quantity": "Số lượng",
+        "priceImport": "Giá nhập",
+        "list": "Danh sách phiếu nhập",
+        "success":"Thêm mới phiếu nhập thành công!",
+        "save":"Lưu",
+        "update":"Chỉnh sửa phiếu nhập thành công!",
+        "action":"Hành động",
+        "edit-import":"Cập nhật phiếu nhập",
+        "edit":"Cập nhật",
+        "name": "Tên sản phẩm",
+        "date": "Ngày nhập"
     },
     "home-page":{
         "about": "Truyền thông nói về KisKingdom",
@@ -297,7 +315,8 @@
         "using-voucher": "Đang dùng mã giảm giá: ",
         "choose-voucher": "Chọn hoặc nhập mã giảm giá",
         "payment-methods": "Phương thức thanh toán: ",
-        "ship-cod": "Thanh toán tiền mặt khi nhận hàng",
+        "ship-cod": "Thanh toán khi nhận hàng",
+        "payment-paypal": "Thanh toán Paypal",
         "sum-cart": "Tổng tiền hàng",
         "product": "sản phẩm",
         "sum-voucher": "Tổng giảm giá:",
@@ -317,7 +336,17 @@
         "received-user": "Đã nhận hàng",
         "date":"Ngày đặt: ",
         "dateSuccess": "Ngày giao thành công: ",
-        "cancel-order":"Huỷ đơn"
+        "cancel-order":"Huỷ đơn",
+        "payment-status":{
+            "loading-data": "Đang tải dữ liệu...",
+            "success": "Thanh toán thành công!",
+            "error": "Thanh toán thất bại!"
+        },
+        "payment-onl":"Thanh toán Online",
+        "no-voucher": "Không sử dụng mã giảm giá",
+        "paid": "Đã thanh toán Online",
+        "unpaid": "Thanh toán khi nhận hàng",
+        "payment-momo": "Thanh toán Momo"
     },
     "voucher":{
         "choose-voucher": "Chọn mã giảm giá",
@@ -361,7 +390,7 @@
         "active-email": "Đã xác thực email",
         "inactive-email": "Chưa xác thực email",
         "birthday":"Ngày sinh",
-        "edit" : "Sửa",
+        "edit" : "Cập nhật",
         "image":"Ảnh đại diện",
         "upload":"Tải ảnh",
         "default":"Mặc định",
@@ -397,6 +426,7 @@
     },
     "detail-product":{
         "no-data": "Chưa có dữ liệu!"
-    }
+    },
+    "error": "Thao tác thất bại! Vui lòng thử lại sau."
 
 }

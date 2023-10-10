@@ -232,6 +232,27 @@ const deleteCommentService = (id) => {
 const getAllCommentByProductIdService = (productId) => {
     return axios.get(`/api/get-all-comment-by-product-id?id=${productId}`)
 }
+const createNewImportService = (data) => {
+    return axios.post(`/api/create-new-import-product`, data)
+}
+const editImportService = (data) => {
+    return axios.put('/api/update-import-product', data)
+}
+const deleteImportService = (id) => {
+    return axios.delete('/api/delete-import-product', { data: { id: id } })
+}
+const getAllImports = () => {
+    return axios.get(`/api/get-all-import-product`)
+}
+const paymentPayPalService = (data) => {
+    return axios.post(`/api/payment-paypal`, data)
+}
+const paymentPayPalSuccessService = (data) => {
+    return axios.post(`/api/payment-paypal-success`, data)
+}
+const paymentMomoService = (data) => {
+    return axios.post(`/api/payment-momo`, data)
+}
 export {
-    handleLogin, sendForgotPassword, handleResetPassword, getAllCodeService, getDetailUserById, createANewUser, deleteUserService, editUserService, getAllUsers, handleChangePassword, handleChangeStatusUser, handleSendVerifyEmail, handleVerifyEmail, editAllCodeService, deleteAllCodeService, createANewAllCode, createNewProduct, getAllProducts, getDetailProductById, getTopProductHomePage, editProductService, handleChangeStatusProduct, deleteProductService, getAllProductImageFromProductService, createNewProductImageService, editProductImageService, deleteProductImageService, getAllBanners, getListBanners, createNewBannerService, editBannerService, deleteBannerService, handleChangeStatusBanner, createNewTypeShipService, editTypeShipService, deleteTypeShipService, getAllTypeShips, createNewBlogService, editBlogService, deleteBlogService, getAllBlogs, getDetailBlogById, getListBlogs, handleChangeStatusBlog, createNewTypeVoucherService, editTypeVoucherService, deleteTypeVoucherService, getAllTypeVouchers, createNewVoucherService, editVoucherService, deleteVoucherService, getAllVouchers, saveUserVoucherService, getDetailVoucherById, getAllVoucherByUserId, handleAddCartService, getAllCartByUserIdService, deleteItemCartService, deleteItemCartByUserIdService, createNewReceiverService, editReceiverService, deleteReceiverService, getAllReceiverByUserIdService, getDetailReceiverById, createNewOrderService, updateStatusOrderService, getDetailOrderByIdService, getAllOrderByUserIdService, getAllOrderService, handleChangeStatusService, createNewCommentService, replyComment, deleteCommentService, getAllCommentByProductIdService
+    handleLogin, sendForgotPassword, handleResetPassword, getAllCodeService, getDetailUserById, createANewUser, deleteUserService, editUserService, getAllUsers, handleChangePassword, handleChangeStatusUser, handleSendVerifyEmail, handleVerifyEmail, editAllCodeService, deleteAllCodeService, createANewAllCode, createNewProduct, getAllProducts, getDetailProductById, getTopProductHomePage, editProductService, handleChangeStatusProduct, deleteProductService, getAllProductImageFromProductService, createNewProductImageService, editProductImageService, deleteProductImageService, getAllBanners, getListBanners, createNewBannerService, editBannerService, deleteBannerService, handleChangeStatusBanner, createNewTypeShipService, editTypeShipService, deleteTypeShipService, getAllTypeShips, createNewBlogService, editBlogService, deleteBlogService, getAllBlogs, getDetailBlogById, getListBlogs, handleChangeStatusBlog, createNewTypeVoucherService, editTypeVoucherService, deleteTypeVoucherService, getAllTypeVouchers, createNewVoucherService, editVoucherService, deleteVoucherService, getAllVouchers, saveUserVoucherService, getDetailVoucherById, getAllVoucherByUserId, handleAddCartService, getAllCartByUserIdService, deleteItemCartService, deleteItemCartByUserIdService, createNewReceiverService, editReceiverService, deleteReceiverService, getAllReceiverByUserIdService, getDetailReceiverById, createNewOrderService, updateStatusOrderService, getDetailOrderByIdService, getAllOrderByUserIdService, getAllOrderService, handleChangeStatusService, createNewCommentService, replyComment, deleteCommentService, getAllCommentByProductIdService, createNewImportService, editImportService, getAllImports, deleteImportService, paymentPayPalService, paymentPayPalSuccessService, paymentMomoService
 }

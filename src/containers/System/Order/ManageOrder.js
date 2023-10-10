@@ -42,9 +42,10 @@ class ManageOrder extends Component {
             OrderDate: moment.unix(item.orderDate / 1000).format('DD/MM/YYYY'),
             OrderDateSuccess: item.orderDateSuccess ? moment.unix(item.orderDateSuccess / 1000).format('DD/MM/YYYY') : 'Đơn hàng chưa có ngày hoàn thành',
             TypeShip: item.typeShipData.type,
-            Voucher: item.voucherData ? item.voucherData.codeVoucher : "Không sử dụng mã giảm giá",
+            Voucher: item.voucherData ? item.voucherData.codeVoucher : <FormattedMessage id={"order.no-voucher"} />,
             OrderAddress: item.receiverOrderData.address,
             Status: item.statusOrderData.value,
+            Payment: <FormattedMessage id={item.isPaymentOnl === 1 ? "order.paid" : "order.unpaid"} />,
             TotalPayment: item.totalPayment > 0 ? (item.totalPayment + item.typeShipData.price).toLocaleString('it-IT', { style: 'currency', currency: 'VND' }) : item.typeShipData.price.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })
         }))
         return result

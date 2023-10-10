@@ -404,7 +404,7 @@ class CategoryPage extends Component {
                                     </ul>
                                 </div>
                                 <div>
-                                    <form className="form-inline my-2 my-lg-0">
+                                    <div className='d-inline-flex' style={{ width: "100%" }}>
                                         <input className="input-search form-control mr-sm-3" type="text" placeholder="Nhập tên sản phẩm tìm kiếm..." aria-label="Search" size="30"
                                             onChange={(event) => this.handleOnChangeInput(event, "valueSearch")}
                                             value={valueSearch === "ALL" ? "" : valueSearch}
@@ -412,7 +412,7 @@ class CategoryPage extends Component {
                                         <button className="btn-search btn btn-outline-info  my-sm-0" type='button'
                                             onClick={() => this.handleClickSearch()}
                                         >Tìm kiếm</button>
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
                             {/* <div className='col-3'>

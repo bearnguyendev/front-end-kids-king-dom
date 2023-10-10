@@ -37,7 +37,7 @@ class DetailBlog extends Component {
 
     render() {
         let { dataBlog, date } = this.state
-        date = moment(dataBlog.createdAt).utc("+07:00").format("LLLL")
+        date = moment(dataBlog.updatedAt).utc("+07:00").format("LLLL")
         let currentURL = +process.env.REACT_APP_IS_LOCALHOST === 1 ? "https://bearnguyen-restaurant-bot-tv.herokuapp.com/" : window.location.href;
         return (
             <>
