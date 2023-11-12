@@ -45,10 +45,10 @@ class TableManageBlog extends Component {
                     valueSearch: "ALL"
                 });
             } else {
-                toast.error("Xoá bài đăng thất bại. Vui lòng thử lại sau.")
+                toast.error(res.errMessage)
             }
         } catch (error) {
-            toast.error("Thao tác thất bại! Vui lòng thử lại sau.")
+            toast.error(<FormattedMessage id={"error"} />)
             if (error.response) {
                 if (error.response.data) {
                     this.setState({
@@ -110,7 +110,7 @@ class TableManageBlog extends Component {
                     })
                 }
             }
-            toast.error("Thao tác thất bại! Vui lòng thử lại sau.")
+            toast.error(<FormattedMessage id={"error"} />)
         }
     }
     render() {

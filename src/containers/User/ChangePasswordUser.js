@@ -72,23 +72,20 @@ class ChangePasswordUser extends Component {
                 })
                 return;
             } else {
-                let id = '';
-                if (this.props.match && this.props.match.params && this.props.match.params.id) {
-                    id = this.props.match.params.id;
-                }
+                let id = this.props.userId ? this.props.userId : ""
                 let data = await handleChangePassword({
                     id: id,
                     oldPassword: this.state.oldPassword,
                     newPassword: this.state.newPassword
                 })
-                if (data && data.errCode !== 0) {
-                    toast.error("Đổi mật khẩu thất bại!")
+                if (data && +data.errCode !== 0) {
+                    toast.error(<FormattedMessage id={"user.fail-change-pw"} />)
                     this.setState({
                         errMessage: data.errMessage
                     })
                 }
-                if (data && data.errCode === 0) {
-                    toast.success("Đổi mật khẩu thành công!")
+                if (data && +data.errCode === 0) {
+                    toast.success(<FormattedMessage id={"user.success-change-pw"} />)
                     emitter.emit('EVENT_CLEAR_INPUT')
                 }
             }
@@ -116,7 +113,7 @@ class ChangePasswordUser extends Component {
         })
     };
     render() {
-        console.log("check stateeeee: ", this.state);
+        console.log("check stateeeee: ", this.props);
         return (
             <div className='change-password-user'>
                 <div className='title-content'>

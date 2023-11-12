@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import Select from "react-select";
 import { toast } from "react-toastify";
 import { Redirect } from 'react-router'
+import { requiredField } from "../../utils";
 class SignUp extends Component {
     constructor(props) {
         super(props);
@@ -82,7 +83,7 @@ class SignUp extends Component {
                 })
             }
             if (data && data.errCode === 0) {
-                toast.success("Tạo tài khoản thành công!");
+                toast.success(<FormattedMessage id={"auth.create-account"} />);
                 this.setState({
                     email: "",
                     password: "",
@@ -117,7 +118,7 @@ class SignUp extends Component {
         for (let i = 0; i < arrCheck.length; i++) {
             if (!this.state[arrCheck[i]]) {
                 isValid = false;
-                alert('Thông tin đầu vào này là bắt buộc: ' + arrCheck[i])
+                toast.error(requiredField + arrCheck[i])
                 break;
             }
         }

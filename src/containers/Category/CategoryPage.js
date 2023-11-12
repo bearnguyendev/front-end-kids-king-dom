@@ -25,7 +25,7 @@ class CategoryPage extends Component {
             sortPercent: '',
             selectedCategory: '',
             selectedBrand: '',
-            valueSearch: "ALL",
+            valueSearch: "",
             isSelectedSortCreatedAt: 0,
             isSelectedSortView: 0,
             scrollTop: 0,
@@ -42,7 +42,7 @@ class CategoryPage extends Component {
             statusId: "S1",
             categoryId: "ALL",
             brandId: "ALL",
-            valueSearch: this.state.valueSearch
+            valueSearch: this.state.valueSearch ? this.state.valueSearch : 'ALL'
         })
     }
 
@@ -50,6 +50,7 @@ class CategoryPage extends Component {
         window.scrollTo(0, 0)
         if (prevProps.listCategory !== this.props.listCategory) {
             let { listCategory } = this.props;
+            listCategory = listCategory && listCategory.filter(item => item.status === 0)
             listCategory.unshift({
                 createdAt: null,
                 keyMap: 'ALL',
@@ -64,6 +65,7 @@ class CategoryPage extends Component {
         }
         if (prevProps.listBrands !== this.props.listBrands) {
             let { listBrands } = this.props;
+            listBrands = listBrands && listBrands.filter(item => item.status === 0)
             listBrands.unshift({
                 createdAt: null,
                 keyMap: "ALL",
@@ -166,7 +168,7 @@ class CategoryPage extends Component {
                 sortName: value === 0 ? true : false,
                 valueSearch: this.state.valueSearch
             })
-            value === 0 ? toast.success("Đang sắp xếp theo tên A->Z") : toast.success("Đang sắp xếp theo tên Z->A")
+            value === 0 ? toast.success(<FormattedMessage id={"home-page.a-z"} />) : toast.success(<FormattedMessage id={"home-page.z-a"} />)
 
         }
         if (type === "sortPercent") {
@@ -181,7 +183,7 @@ class CategoryPage extends Component {
                 sortPercent: value === 0 ? true : false,
                 valueSearch: this.state.valueSearch
             })
-            value === 0 ? toast.success("Đang sắp xếp theo phần trăm giảm giá tăng dần") : toast.success("Đang sắp xếp theo phần trăm giảm giá giảm dần")
+            value === 0 ? toast.success(<FormattedMessage id={"home-page.percent-asc"} />) : toast.success(<FormattedMessage id={"home-page.percent-desc"} />)
         }
         if (type === "sortPrice") {
             this.setState({
@@ -195,7 +197,7 @@ class CategoryPage extends Component {
                 sortPrice: value === 0 ? true : false,
                 valueSearch: this.state.valueSearch
             })
-            value === 0 ? toast.success("Đang sắp xếp theo giá tăng dần") : toast.success("Đang sắp xếp theo giá giảm dần")
+            value === 0 ? toast.success(<FormattedMessage id={"home-page.price-asc"} />) : toast.success(<FormattedMessage id={"home-page.price-desc"} />)
         }
         if (type === "sortView") {
             this.setState({
@@ -227,7 +229,7 @@ class CategoryPage extends Component {
     handleOnChangeInput = async (event, id) => {
         if (event.target.value === '') {
             await this.setState({
-                valueSearch: "ALL",
+                valueSearch: "",
                 isSelectedSortCreatedAt: 0,
                 isSelectedSortView: 0
             })
@@ -235,7 +237,7 @@ class CategoryPage extends Component {
                 statusId: "S1",
                 categoryId: this.state.selectedCategory ? this.state.selectedCategory.value : "ALL",
                 brandId: this.state.selectedBrand ? this.state.selectedBrand.value : "ALL",
-                valueSearch: this.state.valueSearch
+                valueSearch: this.state.valueSearch ? this.state.valueSearch : 'ALL'
             })
         } else {
             let copyState = { ...this.state }
@@ -265,7 +267,7 @@ class CategoryPage extends Component {
         try {
             let { valueSearch } = this.state
             if (valueSearch === '') {
-                toast.error("Bạn chưa nhập tên sản phẩm!")
+                toast.error(<FormattedMessage id={"home-page.no-name-product"} />)
             } else {
                 this.setState({
                     isSelectedSortCreatedAt: 0,
@@ -290,7 +292,7 @@ class CategoryPage extends Component {
                 sortPercent: '',
                 selectedCategory: this.state.dataCategory.find(item => item.value === "ALL"),
                 selectedBrand: this.state.dataBrands.find(item => item.value === "ALL"),
-                valueSearch: "ALL",
+                valueSearch: "",
                 isSelectedSortView: 0,
                 isSelectedSortCreatedAt: 0,
             })
@@ -298,7 +300,7 @@ class CategoryPage extends Component {
                 statusId: "S1",
                 categoryId: "ALL",
                 brandId: "ALL",
-                valueSearch: this.state.valueSearch
+                valueSearch: this.state.valueSearch ? this.state.valueSearch : 'ALL'
             })
         } catch (error) {
             console.log(error);
@@ -307,7 +309,7 @@ class CategoryPage extends Component {
     render() {
         let { dataCategory, dataBrands, selectedCategory, selectedBrand, arrProduct, isSelectedSortCreatedAt, isSelectedSortView, valueSearch } = this.state
         //arrProduct = arrProduct.concat(arrProduct).concat(arrProduct).concat(arrProduct).concat(arrProduct)
-        console.log("check arrProduct: ", arrProduct);
+        console.log("check arrProduct: ", this.state);
         return (
             <>
                 <HomeNav />

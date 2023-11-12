@@ -33,10 +33,10 @@ class TableManageTypeVoucher extends Component {
                 toast.success(res.errMessage);
                 this.props.fetchAllTypeVouchers();
             } else {
-                toast.error("Xoá loại giảm giá thất bại. Vui lòng thử lại sau.")
+                toast.error(res.errMessage)
             }
         } catch (error) {
-            toast.error("Thao tác thất bại! Vui lòng thử lại sau.")
+            toast.error(<FormattedMessage id={"error"} />)
             if (error.response) {
                 if (error.response.data) {
                     this.setState({

@@ -5,6 +5,7 @@ import * as actions from "../../../store/actions";
 import ListOrder from './ListOrder';
 import { CommonUtils } from '../../../utils';
 import moment from 'moment';
+import { toast } from 'react-toastify';
 class ManageOrder extends Component {
 
     constructor(props) {
@@ -51,9 +52,14 @@ class ManageOrder extends Component {
         return result
     }
     handleExportExcel = async () => {
+
         let { dataExport } = this.state
-        let nameFile = `ListOrder-${new Date().getTime()}`
-        await CommonUtils.exportExcel(dataExport, "Danh sách đặt hàng", nameFile)
+        if (!dataExport) {
+            toast.error(<FormattedMessage id={"manage-order.no-data-export-excel"} />)
+        } else {
+            let nameFile = `ListOrder-${new Date().getTime()}`
+            await CommonUtils.exportExcel(dataExport, "Danh sách đặt hàng", nameFile)
+        }
     }
     render() {
         let { arrStatusOrder } = this.state

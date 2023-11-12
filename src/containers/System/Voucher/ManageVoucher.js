@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-import { CRUD_ACTIONS } from '../../../utils';
+import { CRUD_ACTIONS, requiredField } from '../../../utils';
 import * as actions from "../../../store/actions";
 import { createNewVoucherService, editVoucherService } from '../../../services/userService';
 import TableManageVoucher from "./TableManageVoucher";
@@ -35,6 +35,17 @@ class ManageVoucher extends Component {
         this.props.fetchAllTypeVouchers()
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevState.number !== this.state.number) {
+            if (this.state.number < 0) {
+                this.setState({
+                    number: 1
+                })
+            } else if (this.state.number == 0) {
+                this.setState({
+                    number: ""
+                })
+            }
+        }
         if (prevProps.listVouchers !== this.props.listVouchers) {
             let typeVoucherArr = this.props.listTypeVoucher
             this.setState({
@@ -94,10 +105,11 @@ class ManageVoucher extends Component {
                     this.props.fetchAllVouchers();
                 } else {
                     toast.error(res.errMessage)
+                    this.props.fetchAllVouchers();
                 }
             }
         } catch (error) {
-            toast.error("Thao tác thất bại! Vui lòng thử lại sau.")
+            toast.error(<FormattedMessage id={"error"} />)
             if (error.response) {
                 if (error.response.data) {
                     this.setState({
@@ -113,7 +125,7 @@ class ManageVoucher extends Component {
         for (let i = 0; i < arrCheck.length; i++) {
             if (!this.state[arrCheck[i]]) {
                 isValid = false;
-                alert('Đây là trường bắt buộc: ' + arrCheck[i])
+                toast.error(requiredField + arrCheck[i])
                 break;
             }
         }
@@ -196,7 +208,9 @@ class ManageVoucher extends Component {
                                 <div className="input-group ">
                                     <input type="text" class="form-control"
                                         value={codeVoucher}
-                                        onChange={(event) => this.onChangeInput(event, 'codeVoucher')} />
+                                        onChange={(event) => this.onChangeInput(event, 'codeVoucher')}
+                                        readOnly={this.state.action === CRUD_ACTIONS.EDIT ? true : false}
+                                    />
                                 </div>
                             </div>
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-import { CRUD_ACTIONS } from '../../../utils';
+import { CRUD_ACTIONS, requiredField } from '../../../utils';
 import * as actions from "../../../store/actions";
 import { editAllCodeService, createANewAllCode } from '../../../services/userService';
 import TableManageCategory from "./TableManageCategory";
@@ -46,7 +46,7 @@ class ManageCategory extends Component {
                     value: this.state.value,
                 })
                 if (res && res.errCode === 0) {
-                    toast.success("Thêm danh mục thành công!");
+                    toast.success(<FormattedMessage id={"manage-category.add-category"} />);
                     this.props.fetchAllcodeCategory();
                 } else {
                     toast.error(res.errMessage)
@@ -60,14 +60,20 @@ class ManageCategory extends Component {
                     value: value,
                 })
                 if (res && res.errCode === 0) {
-                    toast.success("Chỉnh sửa danh mục thành công!");
+                    toast.success(<FormattedMessage id={"manage-category.up-category"} />);
                     this.props.fetchAllcodeCategory();
                 } else {
                     toast.error(res.errMessage)
+                    this.setState({
+                        keyMap: '',
+                        value: '',
+                        action: CRUD_ACTIONS.CREATE
+                    })
+                    this.props.fetchAllcodeCategory();
                 }
             }
         } catch (error) {
-            toast.error("Thao tác thất bại! Vui lòng thử lại sau.")
+            toast.error(<FormattedMessage id={"error"} />)
         }
     }
     checkValidateInput = () => {
@@ -76,7 +82,7 @@ class ManageCategory extends Component {
         for (let i = 0; i < arrCheck.length; i++) {
             if (!this.state[arrCheck[i]]) {
                 isValid = false;
-                alert('Đây là trường bắt buộc: ' + arrCheck[i])
+                toast.error(requiredField + arrCheck[i])
                 break;
             }
         }
@@ -116,6 +122,7 @@ class ManageCategory extends Component {
                                     className='form-control'
                                     value={keyMap}
                                     onChange={(event) => this.onChangeInput(event, 'keyMap')}
+                                    readOnly={this.state.action === CRUD_ACTIONS.EDIT ? true : false}
                                 />
                             </div>
                             <div className='col-6'>

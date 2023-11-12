@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-import { CommonUtils, CRUD_ACTIONS } from '../../../utils';
+import { CommonUtils, CRUD_ACTIONS, requiredField } from '../../../utils';
 import * as actions from "../../../store/actions";
 import { createNewBlogService, editBlogService } from '../../../services/userService';
 import TableManageBlog from "./TableManageBlog";
@@ -92,10 +92,15 @@ class ManageBlog extends Component {
                     });
                 } else {
                     toast.error(res.errMessage)
+                    this.props.fetchAllBlogs({
+                        statusId: "ALL",
+                        subjectId: "ALL",
+                        valueSearch: "ALL"
+                    });
                 }
             }
         } catch (error) {
-            toast.error("Thao tác thất bại! Vui lòng thử lại sau.")
+            toast.error(<FormattedMessage id={"error"} />)
             if (error.response) {
                 if (error.response.data) {
                     this.setState({
@@ -111,7 +116,7 @@ class ManageBlog extends Component {
         for (let i = 0; i < arrCheck.length; i++) {
             if (!this.state[arrCheck[i]]) {
                 isValid = false;
-                alert('Đây là trường bắt buộc: ' + arrCheck[i])
+                toast.error(requiredField + arrCheck[i])
                 break;
             }
         }
@@ -194,7 +199,9 @@ class ManageBlog extends Component {
                                     {arrSubject && arrSubject.length > 0 &&
                                         arrSubject.map((item, index) => {
                                             return (
+                                                item.status === 0 &&
                                                 <option key={index} value={item.keyMap}>{item.value}</option>
+
                                             )
                                         })}
                                 </select>

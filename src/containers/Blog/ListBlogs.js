@@ -40,6 +40,7 @@ class ListBlogs extends Component {
         }
         if (prevProps.listSubject !== this.props.listSubject) {
             let { listSubject } = this.props
+            listSubject = listSubject && listSubject.filter(item => item.status === 0)
             listSubject.unshift({
                 createdAt: null,
                 keyMap: "ALL",
@@ -108,8 +109,8 @@ class ListBlogs extends Component {
     handleClickSearch = () => {
         try {
             let { valueSearch } = this.state
-            if (valueSearch === '') {
-                toast.error("Bạn chưa nhập tên bài đăng!")
+            if (valueSearch === '' || valueSearch === 'ALL') {
+                toast.error(<FormattedMessage id={"home-page.no-name-blog"} />)
             } else {
                 this.props.fetchAllBlogs({
                     statusId: "S1",

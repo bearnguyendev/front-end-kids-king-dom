@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-import { CRUD_ACTIONS } from '../../../utils';
+import { CRUD_ACTIONS, requiredField } from '../../../utils';
 import * as actions from "../../../store/actions";
 import { editTypeShipService, createNewTypeShipService } from '../../../services/userService';
 import TableManageTypeShip from "./TableManageTypeShip";
@@ -29,6 +29,17 @@ class ManageTypeShip extends Component {
                 action: CRUD_ACTIONS.CREATE
             })
         }
+        if (prevState.price !== this.state.price) {
+            if (this.state.price < 0) {
+                this.setState({
+                    price: 1
+                })
+            } else if (this.state.price == 0) {
+                this.setState({
+                    price: ""
+                })
+            }
+        }
     }
     handleSaveUser = async () => {
         try {
@@ -44,7 +55,7 @@ class ManageTypeShip extends Component {
                     price: price,
                 })
                 if (res && res.errCode === 0) {
-                    toast.success("Thêm phương thức vận chuyển thành công!");
+                    toast.success(<FormattedMessage id={"manage-type-ship.add-type-ship"} />);
                     this.props.fetchAllTypeShips();
                 } else {
                     toast.error(res.errMessage)
@@ -58,14 +69,15 @@ class ManageTypeShip extends Component {
                     price: price,
                 })
                 if (res && res.errCode === 0) {
-                    toast.success("Chỉnh sửa phương thức vận chuyển thành công!");
+                    toast.success(<FormattedMessage id={"manage-type-ship.up-type-ship"} />);
                     this.props.fetchAllTypeShips();
                 } else {
                     toast.error(res.errMessage)
+                    this.props.fetchAllTypeShips();
                 }
             }
         } catch (error) {
-            toast.error("Thao tác thất bại! Vui lòng thử lại sau.")
+            toast.error(<FormattedMessage id={"error"} />)
         }
     }
     checkValidateInput = () => {
@@ -74,7 +86,7 @@ class ManageTypeShip extends Component {
         for (let i = 0; i < arrCheck.length; i++) {
             if (!this.state[arrCheck[i]]) {
                 isValid = false;
-                alert('Đây là trường bắt buộc: ' + arrCheck[i])
+                toast.error(requiredField + arrCheck[i])
                 break;
             }
         }

@@ -23,10 +23,12 @@ class CommentProduct extends Component {
             isOpen: false,
             isOpenModal: false,
             parentId: '',
-            previewImgSendComment: ''
+            previewImgSendComment: '',
+            dataOrder: ''
         }
     }
-    componentDidMount() {
+    async componentDidMount() {
+
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevProps.dataCommentProduct !== this.props.dataCommentProduct) {
@@ -95,8 +97,13 @@ class CommentProduct extends Component {
         try {
             let { activeStar, content, image } = this.state
             let { productId, userInfo } = this.props
-            if (!activeStar) toast.error("Bạn chưa chọn sao !")
-            else if (!content) toast.error("Nội dung không được để trống !")
+            if (!activeStar && !content) {
+                toast.error(<FormattedMessage id={"comment.no-data"} />)
+                this.props.fetchAllCommentByProductIdRedux(productId)
+                return;
+            }
+            if (!activeStar) toast.error(<FormattedMessage id={"comment.no-star"} />)
+            else if (!content) toast.error(<FormattedMessage id={"comment.no-content"} />)
             else {
                 let response = await createNewCommentService({
                     productId: productId,
@@ -106,7 +113,7 @@ class CommentProduct extends Component {
                     star: activeStar
                 })
                 if (response && response.errCode === 0) {
-                    toast.success("Đăng đánh giá thành công !")
+                    toast.success(<FormattedMessage id={"comment.cmt-success"} />)
                     this.props.fetchAllCommentByProductIdRedux(productId)
                 } else {
                     toast.error(response.errMessage)
@@ -139,11 +146,11 @@ class CommentProduct extends Component {
                 parentId: parentId
             })
             if (res && res.errCode === 0) {
-                toast.success("Phản hồi thành công !");
+                toast.success(<FormattedMessage id={"comment.reply-success"} />);
                 this.props.fetchAllCommentByProductIdRedux(productId)
                 emitter.emit('EVENT_CLEAR_MODAL_DATA')
             } else {
-                toast.success("Phản hồi thất bại !");
+                toast.success(<FormattedMessage id={"comment.reply-fail"} />);
             }
         } catch (error) {
             console.log(error);
@@ -154,7 +161,7 @@ class CommentProduct extends Component {
             let { productId } = this.props
             let res = await deleteCommentService(id)
             if (res && res.errCode === 0) {
-                toast.success("Xóa phản hồi thành công !")
+                toast.success(<FormattedMessage id={"comment.dlt-reply"} />)
                 this.props.fetchAllCommentByProductIdRedux(productId)
             } else {
                 toast.error(res.errMessage)
@@ -166,7 +173,8 @@ class CommentProduct extends Component {
 
     render() {
         let { activeStar, previewImgURL, content, dataComment, countStar, isOpen, isOpenModal, previewImgSendComment } = this.state
-        let { userInfo } = this.props
+        let { userInfo, dataOrder, productId } = this.props
+        console.log("check props : ", this.props);
         return (
             <div className="row">
                 <div className="col-lg-12">
@@ -217,7 +225,8 @@ class CommentProduct extends Component {
                         </div>
                     </div>
                     <div className="review_list">
-                        {userInfo &&
+                        {
+                            userInfo &&
                             <div className="review_item">
                                 <div className="form-group">
                                     <label style={{ color: '#333', fontSize: '16px', fontWeight: '600' }}>Viết đánh giá của bạn</label>
@@ -312,6 +321,7 @@ class CommentProduct extends Component {
                         onCloseRequest={() => this.setState({ isOpen: false })}
                     />
                 }
+                {/* <div className='text-lg font-weight-bold font-italic'>Bình luận qua facebook</div> */}
                 <CommentModal
                     isOpen={isOpenModal}
                     toggleFromParent={this.toggleCommentModal}
@@ -330,7 +340,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchAllCommentByProductIdRedux: (id) => dispatch(actions.fetchAllCommentByProductId(id))
+        fetchAllCommentByProductIdRedux: (id) => dispatch(actions.fetchAllCommentByProductId(id)),
     };
 };
 

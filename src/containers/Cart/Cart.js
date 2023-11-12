@@ -140,14 +140,18 @@ class Cart extends Component {
             id: item.id
         })
     }
-    handleDeleteCart = async (userId) => {
+    handleDeleteCart = async (userId, itemCart) => {
         try {
-            let res = await deleteItemCartByUserIdService(userId)
-            if (res && res.errCode === 0) {
-                toast.success(res.errMessage)
-                this.props.fetchAllCartByUserId(userId)
+            if (itemCart.length <= 0) {
+                toast.error(<FormattedMessage id={"cart.no-cart"} />)
             } else {
-                toast.error(res.errMessage)
+                let res = await deleteItemCartByUserIdService(userId)
+                if (res && res.errCode === 0) {
+                    toast.success(res.errMessage)
+                    this.props.fetchAllCartByUserId(userId)
+                } else {
+                    toast.error(res.errMessage)
+                }
             }
         } catch (error) {
             console.log(error);
@@ -155,7 +159,7 @@ class Cart extends Component {
     }
     handleOrder = async (itemCart) => {
         if (itemCart.length <= 0) {
-            toast.error("Giỏ hàng rỗng không thể tiến hành thanh toán!")
+            toast.error(<FormattedMessage id={"cart.no-cart-payment"} />)
         } else {
             this.setState({
                 isShowLoading: true
@@ -171,9 +175,9 @@ class Cart extends Component {
                         isShowLoading: false
                     })
                     if (res && res.errCode === 0) {
-                        toast.error("Vui lòng kiểm tra email để xác thực email trước khi đặt hàng!")
+                        toast.error(<FormattedMessage id={"cart.check-mail"} />)
                     } else {
-                        toast.error("Đã có lỗi xảy ra, vui lòng thử lại sau!")
+                        toast.error(<FormattedMessage id={"error"} />)
                     }
                 }
             } else {
@@ -321,7 +325,7 @@ class Cart extends Component {
                                 </div>
                                 <div className='no-ship-cart my-2'><FormattedMessage id={"cart.no-price-ship"} /></div>
                                 <div className='action-cart'>
-                                    <div className='delete-cart' onClick={() => this.handleDeleteCart(dataItemOfCart.id)}>
+                                    <div className='delete-cart' onClick={() => this.handleDeleteCart(dataItemOfCart.id, dataItemOfCart.ProductUserCartData)}>
                                         <FormattedMessage id={"cart.delete-cart"} />
                                     </div>
                                     <div className='go-payment' onClick={() => this.handleOrder(dataItemOfCart.ProductUserCartData)}>
